@@ -1,0 +1,35 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* color-scheme: light dark; */
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --background-primary: #F8FAFC;       
+  --background-secondary: #FFFFFF;     
+  --background-tertiary: #F1F5F9; 
+  
+  -text-primary: #0F172A;             
+  --text-secondary: #475569;           
+  --text-muted: #94A3B8;               
+  --text-inverse: #FFFFFF;   
+  
+  --brand-primary: #2563EB;           
+  --brand-primary-hover: #1D4ED8;
+  --brand-primary-active: #1E40AF;
+
+  --button-primary: #2563EB;
+  --button-primary-hover: #1D4ED8;
+  --button-accent: #06B6D4;           
+  --button-accent-hover: #0891B2;
+
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --error: #DC2626;
+  --info: #0284C7;
+}
+
+
