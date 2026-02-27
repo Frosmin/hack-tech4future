@@ -1,1 +1,1 @@
-# hack-tech4future
+pip freeze > requirements.txt
