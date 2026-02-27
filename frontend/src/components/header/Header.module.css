@@ -1,0 +1,19 @@
+.container{
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav{
+    display: flex;
+    gap: 1rem;
+}
+
+.links{
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.perfil{
+    display: flex;
+    gap: 1rem;
+}
