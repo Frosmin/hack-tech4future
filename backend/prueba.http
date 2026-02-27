@@ -19,17 +19,23 @@ POST http://localhost:8080/public/login
 Content-Type: application/json
 
 {
-"email": "qweda@qwer.com",
+"email": "cliente1@ejemplo.com",
 "password": "password123"
 }
 
 
-###
-GET  http://localhost:8080/protected/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InBlcGVAZ21haWwuY29tIiwicm9sZSI6InByb3ZlZWRvciIsImV4cCI6MTc2OTMxMTQzMCwiaWF0IjoxNzY5MjI1MDMwfQ.jc_8hy-CMtkImI6t6NYFBvCevlf8aY-QxZv3Gfpr-jY
+### 
+POST http://localhost:8080/public/client
+Content-Type: application/json
 
-
-
-
-
-
+{
+  "User": {
+    "email": "cliente1@ejemplo.com",
+    "password": "password123",
+    "role": "cliente"
+  },
+  "name": "Juan Perez",
+  "contactEmail": "juan.contacto@ejemplo.com",
+  "contactPhone": "999888777",
+  "age": 30
+}
