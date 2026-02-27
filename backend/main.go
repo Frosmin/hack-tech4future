@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/Frosmin/backend/db"
-	"github.com/Frosmin/backend/models"
 	"github.com/Frosmin/backend/routes"
 	"github.com/joho/godotenv"
 )
@@ -18,26 +17,26 @@ func main() {
 	db.Connect()
 
 	// borar las tablas
-	err := db.DB.Migrator().DropTable(
-		models.User{},
-		models.Client{},
-		models.Patologia{},
-		models.Photo{},
-	)
-	if err != nil {
-		log.Println("Error al borrar tablas  ", err)
-	}
-	log.Println("Tablas eliminadas correctamente")
-	// migarciones de las tablas
-	err = db.DB.AutoMigrate(
-		models.User{},
-		models.Client{},
-		models.Patologia{},
-		models.Photo{},
-	)
-	if err != nil {
-		log.Fatal("error en las migraciones ", err)
-	}
+	// err := db.DB.Migrator().DropTable(
+	// 	models.User{},
+	// 	models.Client{},
+	// 	models.Patologia{},
+	// 	models.Photo{},
+	// )
+	// if err != nil {
+	// 	log.Println("Error al borrar tablas  ", err)
+	// }
+	// log.Println("Tablas eliminadas correctamente")
+	// // migarciones de las tablas
+	// err = db.DB.AutoMigrate(
+	// 	models.User{},
+	// 	models.Client{},
+	// 	models.Patologia{},
+	// 	models.Photo{},
+	// )
+	// if err != nil {
+	// 	log.Fatal("error en las migraciones ", err)
+	// }
 
 	r := routes.SetupRouter()
 

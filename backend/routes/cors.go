@@ -22,6 +22,8 @@ func SetupRouter() *gin.Engine {
 	api.POST("/login", LoginHandler)
 	api.POST("/client", PostClientHandler)
 
+	api.POST("/chat", ChatHandler)
+
 	// rutas protegidas
 	protected := r.Group("/protected")
 	protected.Use(middlewares.AuthMiddleware())

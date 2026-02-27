@@ -39,3 +39,12 @@ Content-Type: application/json
   "contactPhone": "999888777",
   "age": 30
 }
+
+
+###
+POST http://localhost:8080/public/chat
+Content-Type: application/json
+
+{
+  "question": "¿Cómo puedo cuidar mi salud alimenticia?"
+}
