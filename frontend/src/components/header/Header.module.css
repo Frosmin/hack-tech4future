@@ -6,10 +6,11 @@
 .nav{
     display: flex;
     gap: 1rem;
-    a{
-        text-decoration: none;
-        color: var(--text-primary);
-    }
+}
+
+.links{
+    text-decoration: none;
+    color: var(--text-primary);
 }
 
 .perfil{

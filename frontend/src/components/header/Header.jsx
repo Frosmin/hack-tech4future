@@ -5,8 +5,8 @@ const Header = () => {
     return (
         <article className={styles.container}>
             <nav className={styles.nav}>
-                <Link to={'/'}>Enciclopedia</Link> 
-                <Link to={'/'}>Analizar con IA</Link> 
+                <Link to={'/'} className={styles.links}>Enciclopedia</Link> 
+                <Link to={'/'} className={styles.links}>Analizar con IA</Link> 
             </nav>
             <section className={styles.perfil}>
                 <button>Log In</button>
