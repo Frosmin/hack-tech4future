@@ -44,6 +44,13 @@ const Header = () => {
         >
           About Us
         </Link>
+                <Link
+          to={"/dashboard"}
+          className={`${currentPath === "/dashboard" ? styles.isActive : ""}`}
+          onClick={() => handleClick("/dashboard")}
+        >
+          Historial
+        </Link>
         {
           user && (
             <Link

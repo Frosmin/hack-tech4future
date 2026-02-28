@@ -7,6 +7,7 @@ import AnalyzePage from './pages/analizar/Analizar'
 import About from './pages/about/About'
 import MisConsultas from './pages/consultas/MisConsultas'
 import Login from './pages/login/Login'
+import Dashboard from './pages/dashboard/Dashboard'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='login' element={<Login />} />
         <Route path='/analizar' element={<AnalyzePage />} />
+        <Route path='/dashboard/:id' element={<Dashboard />} />
         <Route path='/about' element={<About />} />
         <Route path='/consultas' element={<MisConsultas />} />
         <Route path='/consulta/:id' element={<Home />} />

@@ -6,11 +6,13 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/Frosmin/backend/db"
 	"github.com/Frosmin/backend/models"
 	"github.com/Frosmin/backend/services"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func PostPatologia(c *gin.Context) {
@@ -52,7 +54,7 @@ func PostPatologia(c *gin.Context) {
 	}
 	defer file.Close()
 
-	// Leer bytes
+	// Leer bytes para enviarlos a la IA
 	imageBytes, err := io.ReadAll(file)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo leer la imagen"})
@@ -61,6 +63,21 @@ func PostPatologia(c *gin.Context) {
 
 	mimeType := http.DetectContentType(imageBytes)
 	format := strings.TrimPrefix(mimeType, "image/")
+
+	// === NUEVO CÓDIGO: Subir la imagen a Cloudinary ===
+	// 1. Regresar el puntero del archivo al inicio después de usar io.ReadAll
+	if _, err := file.Seek(0, 0); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo resetear el buffer del archivo"})
+		return
+	}
+
+	// 2. Usar tu servicio para subir la imagen generándole una URL segura
+	uploadedUrl, err := services.UploadImage(file, "analisis_patologias")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al subir la imagen en Cloudinary"})
+		return
+	}
+	// =================================================
 
 	// Llamar al servicio
 	ans, err := services.GenerateAnswerWithImage(contexto, imageBytes, format)
@@ -96,7 +113,7 @@ func PostPatologia(c *gin.Context) {
 		})
 	}
 
-	// 3. Crear el modelo Patologia, incluyendo sus compuestos asociados
+	// 3. Crear el modelo Patologia, incluyendo sus compuestos y AHORA también su foto
 	nuevaPatologia := models.Patologia{
 		Title:       geminiData.Title,
 		Description: geminiData.Description,
@@ -105,7 +122,13 @@ func PostPatologia(c *gin.Context) {
 		Provability: geminiData.Provability,
 		IsMedical:   geminiData.IsMedical,
 		UserID:      client.UserID,
-		Compuestos:  compuestosParaGuardar, // GORM asignará el ID de las patologías automáticamente
+		Compuestos:  compuestosParaGuardar,
+		Photos: []models.Photo{
+			{
+				PhotoUrl:  uploadedUrl,
+				DateTaken: time.Now(),
+			},
+		},
 	}
 
 	// 4. Guardar en la base de datos
@@ -116,4 +139,70 @@ func PostPatologia(c *gin.Context) {
 
 	// Retornar el registro ya guardado con su ID y fechas generadas
 	c.JSON(http.StatusOK, nuevaPatologia)
+}
+
+func GetPatologiaByID(c *gin.Context) {
+
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuario no autorizado"})
+		return
+	}
+
+	patologiaID := c.Param("id")
+
+	var patologia models.Patologia
+
+	resultado := db.DB.Preload("Compuestos").Preload("Photos").
+		Where("id = ? AND user_id = ?", patologiaID, userID).
+		First(&patologia)
+
+	if resultado.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Patología no encontrada o no tienes permisos para verla"})
+		return
+	}
+
+	c.JSON(http.StatusOK, patologia)
+}
+
+func GetMisPatologias(c *gin.Context) {
+
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuario no autorizado"})
+		return
+	}
+
+	var patologias []models.Patologia
+	db.DB.Preload("Photos", func(db *gorm.DB) *gorm.DB {
+		return db.Order("created_at ASC")
+	}).Where("user_id = ?", userID).Order("created_at DESC").Find(&patologias)
+
+	type PatologiaResumen struct {
+		ID      uint   `json:"id"`
+		Title   string `json:"title"`
+		Gravity string `json:"gravity"`
+		Image   string `json:"Image"`
+	}
+
+	var resultado []PatologiaResumen
+	for _, p := range patologias {
+		fotoBase := ""
+		if len(p.Photos) > 0 {
+			fotoBase = p.Photos[0].PhotoUrl
+		}
+
+		resultado = append(resultado, PatologiaResumen{
+			ID:      p.ID,
+			Title:   p.Title,
+			Gravity: p.Gravity,
+			Image:   fotoBase,
+		})
+	}
+
+	if resultado == nil {
+		resultado = []PatologiaResumen{}
+	}
+
+	c.JSON(http.StatusOK, resultado)
 }
