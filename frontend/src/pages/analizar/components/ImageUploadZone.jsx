@@ -17,7 +17,7 @@ export default function ImageUploadZone({ files = [], onFilesChange }) {
       f.type.startsWith("image/"),
     );
     if (!valid.length) return;
-    const merged = [...files, ...valid].slice(0, 6); // máx 6 imágenes
+    const merged = [...files, ...valid].slice(0, 1); // máx 6 imágenes
     onFilesChange(merged);
   };
 
