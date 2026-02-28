@@ -1,15 +1,16 @@
-import usePath from '../../stores/path.store';
-import styles from './Footer.module.css'
-import { Link } from 'react-router';
+import usePath from "../../stores/path.store";
+import styles from "./Footer.module.css";
+import { Link } from "react-router";
 
-const footerText = "Plataforma impulsada por IA para identificar y clasificar distintos tipos de manchas cutáneas a partir de imágenes. Esta herramienta no reemplaza la evaluación médica profesional; su objetivo es brindar orientación informativa y educativa."
+const footerText =
+  "Plataforma impulsada por IA para identificar y clasificar distintos tipos de manchas cutáneas a partir de imágenes. Esta herramienta no reemplaza la evaluación médica profesional; su objetivo es brindar orientación informativa y educativa.";
 
 const Footer = () => {
-  const { updatePath } = usePath()
+  const { updatePath } = usePath();
 
   const handleClick = (path) => {
-    updatePath(path)
-  }
+    updatePath(path);
+  };
   return (
     <footer className={styles.container}>
       <section className={styles.section}>
@@ -22,29 +23,50 @@ const Footer = () => {
         </article>
         <article className={styles.enlaces}>
           <h3>Enlaces</h3>
-          <Link to={'/'} onClick={() => updatePath('/')}>Enciclopedia</Link>
-          <Link to={'/analizar'} onClick={() => updatePath('/analizar')}>Analizar con IA</Link>
-          <Link to={'/about'} onClick={() => handleClick('/about')}>About Us</Link>
+          <Link to={"/"} onClick={() => updatePath("/")}>
+            Enciclopedia
+          </Link>
+          <Link to={"/analizar"} onClick={() => updatePath("/analizar")}>
+            Analizar con IA
+          </Link>
+          <Link to={"/about"} onClick={() => handleClick("/about")}>
+            About Us
+          </Link>
         </article>
         <article className={styles.contactos}>
           <h3>Contáctanos</h3>
-          <Link to={"mailto:ricardo.rojas.carvajal@gmail.com"}>Correo Electrónico</Link>
-          <Link to={"https://m.me/AngloAmericano225"} target='_blank' rel='noopener'>Facebook</Link>
-          <Link to={"https://wa.me/59169509997"} target='_blank' rel='noopener'>WhatsApp</Link>
+          <Link to={"mailto:ricardo.rojas.carvajal@gmail.com"}>
+            Correo Electrónico
+          </Link>
+          <Link
+            to={"https://m.me/AngloAmericano225"}
+            target="_blank"
+            rel="noopener"
+          >
+            Facebook
+          </Link>
+          <Link to={"https://wa.me/59169509997"} target="_blank" rel="noopener">
+            WhatsApp
+          </Link>
         </article>
         <article className={styles.siguenos}>
           <h3>Siguenos</h3>
           <div className={styles.itemContainer}>
-            <Link to={"https://www.facebook.com"} target='_blank' rel='noopener'>
-              <img
-                src="facebook.svg"
-                alt="Facebook icon"
-              />
+            <Link
+              to={"https://www.facebook.com"}
+              target="_blank"
+              rel="noopener"
+            >
+              <img src="facebook.svg" alt="Facebook icon" />
             </Link>
-            <Link to={"https://www.instagram.com"} target='_blank' rel='noopener'>
+            <Link
+              to={"https://www.instagram.com"}
+              target="_blank"
+              rel="noopener"
+            >
               <img src="instagram.svg" alt="Instagram icon" />
             </Link>
-            <Link to={"https://www.tiktok.com"} target='_blank' rel='noopener'>
+            <Link to={"https://www.tiktok.com"} target="_blank" rel="noopener">
               <img src="tiktok.svg" alt="Tiktok icon" />
             </Link>
           </div>
@@ -54,7 +76,7 @@ const Footer = () => {
         <small>&copy; ChocoMilk Technologies for the future</small>
       </article>
     </footer>
-  )
-}
+  );
+};
 
 export default Footer;

@@ -1,61 +1,56 @@
 .container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding-block: 0.8rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-block: 0.4rem;
 
-    a {
-        text-decoration: none;
-        color: var(--text-primary);
-    }
-}
-
-.nav {
-    display: flex;
-    gap: 1rem;
+  a {
+    text-decoration: none;
+    color: var(--text-primary);
+  }
 }
 
 .logoContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .nav {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
 
-    a {
-        text-decoration: none;
-        color: var(--text-primary);
-    }
+  a {
+    text-decoration: none;
+    color: var(--text-primary);
+  }
 }
 
 .right {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .button {
-    border: transparent;
-    border-radius: 15px;
-    padding: 1rem 2rem;
-    background: var(--button-primary);
-    color: var(--text-inverse);
-    font-weight: 600;
-    font-size: 1rem;
+  border: transparent;
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  background: var(--button-primary);
+  color: var(--text-inverse);
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .button:active {
-    transform: scale(0.96);
+  transform: scale(0.96);
 }
 
 .isActive {
-    font-weight: 700;
-    font-size: 1rem;
-    border-bottom: 4px solid var(--button-primary);
-    padding-bottom: 0.4rem;
-    transform: scale(1.15);
+  font-weight: 700;
+  font-size: 1rem;
+  border-bottom: 4px solid var(--button-primary);
+  padding-bottom: 0.4rem;
+  transform: scale(1.15);
 }
