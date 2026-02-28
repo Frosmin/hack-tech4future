@@ -8,7 +8,7 @@ export default function ImageTypeSelector({ selected, onSelect }) {
   const types = [
     {
       id: "skin",
-      label: "Mancha de piel",
+      label: "Patología de la piel",
       desc: "Lesiones, manchas, nevos, erupciones",
       color: "#0ea5e9",
       bg:
@@ -52,46 +52,46 @@ export default function ImageTypeSelector({ selected, onSelect }) {
         </svg>
       ),
     },
-    {
-      id: "xray",
-      label: "Radiografía",
-      desc: "Tórax, huesos, cráneo, columna",
-      color: "#6366f1",
-      bg:
-        selected === "xray"
-          ? "linear-gradient(135deg,#ede9fe,#ddd6fe)"
-          : "rgba(255,255,255,0.8)",
-      border: selected === "xray" ? "#a5b4fc" : "#e2e8f0",
-      icon: (
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-          <rect
-            x="3"
-            y="3"
-            width="18"
-            height="18"
-            rx="2"
-            stroke={selected === "xray" ? "#6366f1" : "#94a3b8"}
-            strokeWidth="1.8"
-          />
-          <path
-            d="M12 8v8M8 12h8"
-            stroke={selected === "xray" ? "#6366f1" : "#94a3b8"}
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-          <path
-            d="M8 16 Q12 10 16 8"
-            stroke={selected === "xray" ? "#818cf8" : "#cbd5e1"}
-            strokeWidth="1.2"
-            strokeDasharray="2 2"
-          />
-        </svg>
-      ),
-    },
+    // {
+    //   id: "xray",
+    //   label: "Radiografía",
+    //   desc: "Tórax, huesos, cráneo, columna",
+    //   color: "#6366f1",
+    //   bg:
+    //     selected === "xray"
+    //       ? "linear-gradient(135deg,#ede9fe,#ddd6fe)"
+    //       : "rgba(255,255,255,0.8)",
+    //   border: selected === "xray" ? "#a5b4fc" : "#e2e8f0",
+    //   icon: (
+    //     <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+    //       <rect
+    //         x="3"
+    //         y="3"
+    //         width="18"
+    //         height="18"
+    //         rx="2"
+    //         stroke={selected === "xray" ? "#6366f1" : "#94a3b8"}
+    //         strokeWidth="1.8"
+    //       />
+    //       <path
+    //         d="M12 8v8M8 12h8"
+    //         stroke={selected === "xray" ? "#6366f1" : "#94a3b8"}
+    //         strokeWidth="1.8"
+    //         strokeLinecap="round"
+    //       />
+    //       <path
+    //         d="M8 16 Q12 10 16 8"
+    //         stroke={selected === "xray" ? "#818cf8" : "#cbd5e1"}
+    //         strokeWidth="1.2"
+    //         strokeDasharray="2 2"
+    //       />
+    //     </svg>
+    //   ),
+    // },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 gap-3">
       {types.map((t) => (
         <button
           key={t.id}
