@@ -40,8 +40,8 @@ const Header = () => {
         {user && (
           <Link
             to={"/analizar/0"}
-            className={`${currentPath === "/analizar/0" ? styles.isActive : ""}`}
-            onClick={() => handleClick("/analizar/0")}
+            className={`${currentPath === "/analizar" ? styles.isActive : ""}`}
+            onClick={() => handleClick("/analizar")}
           >
             Analizar con IA
           </Link>

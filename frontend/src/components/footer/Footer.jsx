@@ -1,4 +1,5 @@
 import usePath from "../../stores/path.store";
+import { useUser } from "../../stores/user.store";
 import styles from "./Footer.module.css";
 import { Link } from "react-router";
 
@@ -7,7 +8,8 @@ const footerText =
 
 const Footer = () => {
   const { updatePath } = usePath();
-
+  const { user } = useUser();
+ 
   const handleClick = (path) => {
     updatePath(path);
   };
@@ -24,14 +26,22 @@ const Footer = () => {
         <article className={styles.enlaces}>
           <h3>Enlaces</h3>
           <Link to={"/"} onClick={() => updatePath("/")}>
-            Home
+            Inicio
           </Link>
-          <Link to={"/analizar"} onClick={() => updatePath("/analizar")}>
-            Analizar con IA
-          </Link>
-          <Link to={"/about"} onClick={() => handleClick("/about")}>
-            About Us
-          </Link>
+          {
+            user && (
+              <Link to={"/analizar/0"} onClick={() => updatePath("/analizar")}>
+                Analizar con IA
+              </Link>
+            )
+          }
+          {
+            user && (
+              <Link to={"/consultas"} onClick={() => updatePath("/consultas")}>
+                Mis consultas
+              </Link>
+            )
+          }
         </article>
         <article className={styles.contactos}>
           <h3>Contáctanos</h3>
