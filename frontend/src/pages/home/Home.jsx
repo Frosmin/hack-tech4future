@@ -3,6 +3,9 @@ import Button from "../../components/ui/Button";
 import FeatureCard from "./components/FeatureCard";
 import StepCard from "./components/StepCard";
 import { FEATURE_CARDS, STEPS, STATS } from "../../utils/homeData";
+import { useUser } from "../../stores/user.store";
+import usePath from "../../stores/path.store";
+import { useNavigate } from "react-router";
 
 const SkinIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
@@ -79,10 +82,23 @@ const ArrowIcon = ({ color = "currentColor" }) => (
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const { user } = useUser();
+  const { updatePath } = usePath();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handlUpload = () => {
+    if (user) {
+      updatePath("/analizar/0");
+      navigate("/analizar/0");
+    } else {
+      updatePath("/login");
+      navigate("/login");
+    }
+  };
 
   return (
     <div
@@ -149,7 +165,12 @@ export default function Home() {
           </p>
 
           <div className="flex relative items-center justify-center gap-4 mb-20">
-            <Button variant="primary" icon={<UploadIcon />}>
+            <Button
+              variant="primary"
+              icon={<UploadIcon />}
+              onClick={handlUpload}
+              className="cursor-pointer"
+            >
               Subir imagen
             </Button>
           </div>
