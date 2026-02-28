@@ -72,10 +72,6 @@ hack-tech4future/
 └── README.md
 ```
 
-## Estado del proyecto
-
-Proyecto desarrollado en contexto de hackathon. El código evoluciona rápidamente y puede incluir cambios frecuentes en funcionalidades o interfaz.
-
 ## Seguridad y publicación
 
 - Mantener secretos fuera del control de versiones.
