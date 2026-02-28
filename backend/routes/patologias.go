@@ -1,9 +1,155 @@
+// package routes
+
+// import (
+// 	"encoding/json"
+// 	"fmt"
+// 	"io"
+// 	"net/http"
+// 	"strings"
+// 	"time"
+
+// 	"github.com/Frosmin/backend/db"
+// 	"github.com/Frosmin/backend/models"
+// 	"github.com/Frosmin/backend/services"
+// 	"github.com/gin-gonic/gin"
+// 	"gorm.io/gorm"
+// )
+
+// func PostPatologia(c *gin.Context) {
+
+// 	userID, exists := c.Get("userID")
+// 	if !exists {
+// 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuario no autorizado"})
+// 		return
+// 	}
+
+// 	var client models.Client
+// 	if result := db.DB.Where("user_id = ?", userID).First(&client); result.Error != nil {
+// 		c.JSON(http.StatusNotFound, gin.H{"error": "Perfil de cliente no encontrado para este usuario"})
+// 		return
+// 	}
+
+// 	contexto := fmt.Sprintf(
+// 		"Datos del paciente que puede servirde en la evaluacion:\n- Edad: %d\n- Tipo de Sangre: %s\n- Condiciones Preexistentes: %s",
+// 		client.Age,
+// 		client.BloodType,
+// 		client.PreExistingCondition,
+// 	)
+
+// 	// Obtener archivo
+// 	fileHeader, err := c.FormFile("image")
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Se requiere un archivo 'image'"})
+// 		return
+// 	}
+
+// 	// Obtener pregunta opcional
+// 	// question := c.PostForm("question")
+
+// 	// Abrir archivo
+// 	file, err := fileHeader.Open()
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo abrir la imagen"})
+// 		return
+// 	}
+// 	defer file.Close()
+
+// 	// Leer bytes para enviarlos a la IA
+// 	imageBytes, err := io.ReadAll(file)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo leer la imagen"})
+// 		return
+// 	}
+
+// 	mimeType := http.DetectContentType(imageBytes)
+// 	format := strings.TrimPrefix(mimeType, "image/")
+
+// 	// === NUEVO CÓDIGO: Subir la imagen a Cloudinary ===
+// 	// 1. Regresar el puntero del archivo al inicio después de usar io.ReadAll
+// 	if _, err := file.Seek(0, 0); err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo resetear el buffer del archivo"})
+// 		return
+// 	}
+
+// 	// 2. Usar tu servicio para subir la imagen generándole una URL segura
+// 	uploadedUrl, err := services.UploadImage(file, "analisis_patologias")
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al subir la imagen en Cloudinary"})
+// 		return
+// 	}
+// 	// =================================================
+
+// 	// Llamar al servicio
+// 	ans, err := services.GenerateAnswerWithImage(contexto, imageBytes, format)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	// 1. Estructura temporal para decodificar la respuesta JSON de Gemini
+// 	var geminiData struct {
+// 		Title          string  `json:"title"`
+// 		Description    string  `json:"description"`
+// 		Gravity        string  `json:"gravity"`
+// 		Recommendation string  `json:"recommendation"`
+// 		Provability    float64 `json:"provability"`
+// 		IsMedical      bool    `json:"isMedical"`
+// 		Compuestos     []struct {
+// 			Name string `json:"name"`
+// 		} `json:"compuestos"`
+// 	}
+
+// 	// 2. Convertir el texto JSON a nuestra estructura temporal
+// 	if err := json.Unmarshal([]byte(ans), &geminiData); err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al procesar la respuesta de la IA"})
+// 		return
+// 	}
+
+// 	// Transformar los compuestos del JSON a la estructura del modelo (GORM)
+// 	var compuestosParaGuardar []models.Compuesto
+// 	for _, comp := range geminiData.Compuestos {
+// 		compuestosParaGuardar = append(compuestosParaGuardar, models.Compuesto{
+// 			Name: comp.Name,
+// 		})
+// 	}
+
+// 	// 3. Crear el modelo Patologia, incluyendo sus compuestos y AHORA también su foto
+// 	nuevaPatologia := models.Patologia{
+// 		Title:       geminiData.Title,
+// 		Description: geminiData.Description,
+// 		Treatment:   geminiData.Recommendation,
+// 		Gravity:     geminiData.Gravity,
+// 		Provability: geminiData.Provability,
+// 		IsMedical:   geminiData.IsMedical,
+// 		UserID:      client.UserID,
+// 		Compuestos:  compuestosParaGuardar,
+// 		Photos: []models.Photo{
+// 			{
+// 				PhotoUrl:  uploadedUrl,
+// 				DateTaken: time.Now(),
+// 			},
+// 		},
+// 	}
+
+// 	// 4. Guardar en la base de datos
+// 	if err := db.DB.Create(&nuevaPatologia).Error; err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar en la base de datos"})
+// 		return
+// 	}
+
+// 	// Retornar el registro ya guardado con su ID y fechas generadas
+// 	c.JSON(http.StatusOK, nuevaPatologia)
+// }
+
+// ...existing code...
+
 package routes
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -25,6 +171,7 @@ func PostPatologia(c *gin.Context) {
 
 	var client models.Client
 	if result := db.DB.Where("user_id = ?", userID).First(&client); result.Error != nil {
+		log.Printf("[PostPatologia] Error al buscar cliente para userID %v: %v\n", userID, result.Error)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Perfil de cliente no encontrado para este usuario"})
 		return
 	}
@@ -39,17 +186,16 @@ func PostPatologia(c *gin.Context) {
 	// Obtener archivo
 	fileHeader, err := c.FormFile("image")
 	if err != nil {
+		log.Printf("[PostPatologia] No se recibió el archivo 'image': %v\n", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Se requiere un archivo 'image'"})
 		return
 	}
 
-	// Obtener pregunta opcional
-	// question := c.PostForm("question")
-
 	// Abrir archivo
 	file, err := fileHeader.Open()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo abrir la imagen"})
+		log.Printf("[PostPatologia] Error al abrir el archivo de imagen: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo abrir la imagen recibida"})
 		return
 	}
 	defer file.Close()
@@ -57,34 +203,47 @@ func PostPatologia(c *gin.Context) {
 	// Leer bytes para enviarlos a la IA
 	imageBytes, err := io.ReadAll(file)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo leer la imagen"})
+		log.Printf("[PostPatologia] Error al leer los bytes de la imagen: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo leer el contenido de la imagen"})
 		return
 	}
 
-	mimeType := http.DetectContentType(imageBytes)
+	// MEJORA: Obtenemos el formato directamente del Content-Type que envió el cliente (más seguro para webp, heic)
+	mimeType := fileHeader.Header.Get("Content-Type")
 	format := strings.TrimPrefix(mimeType, "image/")
+	if format == mimeType {
+		format = "jpeg" // Formato fallback si no se detectó bien
+	}
 
-	// === NUEVO CÓDIGO: Subir la imagen a Cloudinary ===
 	// 1. Regresar el puntero del archivo al inicio después de usar io.ReadAll
 	if _, err := file.Seek(0, 0); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo resetear el buffer del archivo"})
+		log.Printf("[PostPatologia] Error al resetear el buffer del archivo (Seek): %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error interno manipulando el archivo"})
 		return
 	}
 
-	// 2. Usar tu servicio para subir la imagen generándole una URL segura
+	// 2. Usar tu servicio para subir la imagen a Cloudinary
 	uploadedUrl, err := services.UploadImage(file, "analisis_patologias")
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al subir la imagen en Cloudinary"})
+		log.Printf("[PostPatologia] Error en el servicio Cloudinary: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Fallo la subida de imagen a la nube (Cloudinary)"})
 		return
 	}
-	// =================================================
 
-	// Llamar al servicio
+	// Llamar al servicio de la IA (Gemini)
 	ans, err := services.GenerateAnswerWithImage(contexto, imageBytes, format)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		log.Printf("[PostPatologia] Error en el servicio de IA (Gemini): %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "La inteligencia artificial falló al analizar la imagen: " + err.Error()})
 		return
 	}
+
+	// MEJORA VITAL: A veces Gemini envuelve el JSON en ```json ... ``` lo cual rompe el Unmarshal
+	cleanAns := strings.TrimSpace(ans)
+	cleanAns = strings.TrimPrefix(cleanAns, "```json")
+	cleanAns = strings.TrimPrefix(cleanAns, "```")
+	cleanAns = strings.TrimSuffix(cleanAns, "```")
+	cleanAns = strings.TrimSpace(cleanAns)
 
 	// 1. Estructura temporal para decodificar la respuesta JSON de Gemini
 	var geminiData struct {
@@ -99,9 +258,10 @@ func PostPatologia(c *gin.Context) {
 		} `json:"compuestos"`
 	}
 
-	// 2. Convertir el texto JSON a nuestra estructura temporal
-	if err := json.Unmarshal([]byte(ans), &geminiData); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al procesar la respuesta de la IA"})
+	// 2. Convertir el texto JSON a nuestra estructura temporal usando el texto LIMPIO
+	if err := json.Unmarshal([]byte(cleanAns), &geminiData); err != nil {
+		log.Printf("\n[PostPatologia] ❌ ERROR DECODIFICANDO JSON DE LA IA ❌\nRespuesta arrojada por Gemini:\n%s\nError de Unmarshal: %v\n", ans, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "La IA retornó un formato no válido, intenta de nuevo"})
 		return
 	}
 
@@ -113,7 +273,7 @@ func PostPatologia(c *gin.Context) {
 		})
 	}
 
-	// 3. Crear el modelo Patologia, incluyendo sus compuestos y AHORA también su foto
+	// 3. Crear el modelo Patologia, incluyendo sus compuestos y la foto subida
 	nuevaPatologia := models.Patologia{
 		Title:       geminiData.Title,
 		Description: geminiData.Description,
@@ -133,13 +293,16 @@ func PostPatologia(c *gin.Context) {
 
 	// 4. Guardar en la base de datos
 	if err := db.DB.Create(&nuevaPatologia).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar en la base de datos"})
+		log.Printf("[PostPatologia] Error guardando registro en base de datos: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Fallo al guardar el diagnóstico en la base de datos"})
 		return
 	}
 
 	// Retornar el registro ya guardado con su ID y fechas generadas
 	c.JSON(http.StatusOK, nuevaPatologia)
 }
+
+// ...existing code...
 
 func GetPatologiaByID(c *gin.Context) {
 
@@ -294,4 +457,31 @@ func ComparePatologias(c *gin.Context) {
 		"oldPhotoUrl":    ultimaFoto.PhotoUrl,
 		"patologiaTitle": patologia.Title,
 	})
+}
+
+// del doc
+func GetHardPatologias(c *gin.Context) {
+
+	_, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuario no autorizado"})
+		return
+	}
+
+	role, roleExistes := c.Get("role")
+
+	if !roleExistes || role != models.DoctorRole {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Acceso denegado: solo doctores pueden ver patologías de alta gravedad"})
+		return
+	}
+
+	var patologias []models.Patologia
+
+	if err := db.DB.Preload("Compuestos").Preload("Photos").Where("gravity = ?", "alta").Find(&patologias).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al consultar la base de datos"})
+		return
+	}
+
+	c.JSON(http.StatusOK, patologias)
+
 }

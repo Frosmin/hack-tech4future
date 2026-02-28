@@ -5,16 +5,16 @@ Content-Type: application/json
 
 {
   "User": {
-    "email": "juan@juan.com",
-    "password": "juan",
+    "email": "yon@yon.com",
+    "password": "yon",
     "role": "Cliente"
   },
   "Name": "Tieweplo",
-  "contactEmail": "tiewe@ejemplo.com",
+  "contactEmail": "yon@ejemplo.com",
   "contactPhone": "70012345",
   "age": 30,
   "bloodType": "O+",
-  "preExistingCondition": "Ninguna"
+  "preExistingCondition": "cancer bine rudo 2 dias de vida"
 }
 
 ### 
@@ -22,7 +22,40 @@ POST http://localhost:8080/public/login
 Content-Type: application/json
 
 {
-"email": "juan@juan.com",
+"email": "juan@juan2.com",
+"password": "juan"
+}
+
+
+
+
+
+
+
+### 
+POST http://localhost:8080/public/client
+Content-Type: application/json
+
+{
+  "User": {
+    "email": "doc@doc.com",
+    "password": "juan",
+    "role": "doctor"
+  },
+  "Name": "Tieweplo",
+  "contactEmail": "doc@ejemplo.com",
+  "contactPhone": "70012345",
+  "age": 30,
+  "bloodType": "O+",
+  "preExistingCondition": "cancer bine rudo 2 dias de vida"
+}
+
+### 
+POST http://localhost:8080/public/login
+Content-Type: application/json
+
+{
+"email": "doc@doc.com",
 "password": "juan"
 }
 
@@ -52,3 +85,8 @@ Content-Type: application/json
   "question": "estas funcionando? solo devuelveme un si o no"
 }
 
+
+
+###
+GET http://localhost:8080/protected/docPatologias
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJlbWFpbCI6ImRvY0Bkb2MuY29tIiwicm9sZSI6ImRvY3RvciIsImV4cCI6MTc3MjM3ODg0MSwiaWF0IjoxNzcyMjkyNDQxfQ.jL0Tx_iFd3IuYDcmV8C8H7mswYBqk68h1BdUcN6tacA
