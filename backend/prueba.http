@@ -5,12 +5,12 @@ Content-Type: application/json
 
 {
   "User": {
-    "email": "qweda@qwer.com",
-    "password": "password123",
+    "email": "juan@juan.com",
+    "password": "juan",
     "role": "Cliente"
   },
   "Name": "Tieweplo",
-  "contactEmail": "tieweplo@ejemplo.com",
+  "contactEmail": "tiewe@ejemplo.com",
   "contactPhone": "70012345",
   "age": 30,
   "bloodType": "O+",
@@ -22,8 +22,8 @@ POST http://localhost:8080/public/login
 Content-Type: application/json
 
 {
-"email": "qweda@qwer.com",
-"password": "password123"
+"email": "juan@juan.com",
+"password": "juan"
 }
 
 
