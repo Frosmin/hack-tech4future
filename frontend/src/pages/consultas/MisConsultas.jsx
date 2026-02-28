@@ -3,18 +3,16 @@ import CardConsulta from './components/CardConsulta'
 import styles from './MisConsultas.module.css'
 import { useAxios } from '../../hooks/axios'
 
-// const data = [
-//   {
-//     photo: "sara.png",
-//     title: "Es el titulo",
-//     gravity: "lethal",
-//     recuperation: "health points"
-//   },
-// ]
-
 const MisConsultas = () => {
   const [list, setList] = useState([])
   const { request, loading, error, data } = useAxios()
+
+  const last = {
+    Image: 'plus.jpg',
+    title: 'Agregar nuevo',
+    gravity: '',
+    id: 0,
+  }
 
   useEffect(() => {
     const getData = async () => {
@@ -24,9 +22,8 @@ const MisConsultas = () => {
       });
 
       if (result) {
-        setList(result)
+        setList([...result, last])
       }
-      console.log(result)
     }
     getData()
   }, [])

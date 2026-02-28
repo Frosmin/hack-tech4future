@@ -6,6 +6,7 @@ import ImageTypeSelector from "./components/ImageTypeSelector";
 import FloatingParticle from "../home/components/FloatingParticle";
 import { PARTICLES } from "../../utils/homeData";
 import ResultsPage from "./ResultsPage"; // Importamos el generador de resultados
+import usePath from "../../stores/path.store";
 
 const SpinnerIcon = () => (
   <svg
@@ -112,13 +113,13 @@ export default function AnalyzePage() {
   // Render condicional: Si hay resultados, mostrar ResultPage en vez del formulario
   if (analysisResult) {
     return (
-      <ResultsPage 
-        data={analysisResult} 
+      <ResultsPage
+        data={analysisResult}
         onNewAnalysis={() => {
           setAnalysisResult(null);
           setFiles([]);
           setType(null);
-        }} 
+        }}
       />
     );
   }

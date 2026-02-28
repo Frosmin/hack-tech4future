@@ -44,7 +44,7 @@ const Header = () => {
         >
           About Us
         </Link>
-                <Link
+        <Link
           to={"/dashboard"}
           className={`${currentPath === "/dashboard" ? styles.isActive : ""}`}
           onClick={() => handleClick("/dashboard")}
