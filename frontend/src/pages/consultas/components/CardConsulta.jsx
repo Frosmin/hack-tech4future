@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router'
 const CardConsulta = ({ img, title, gravity, id }) => {
   const navigate = useNavigate()
   const handleClick = () => {
+    if (id === 0) {
+      navigate(`/analizar/${id}`)
+      return
+    }
     navigate(`/dashboard/${id}`)
   }
   return (
