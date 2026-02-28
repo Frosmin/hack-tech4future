@@ -1,10 +1,16 @@
-.container{
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    background-color: #f8fafc;
-    min-height: 100dvh;
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background-color: #f8fafc;
+  min-height: 100dvh;
 }
 
-.container > *:nth-child(2){
-    background-color: var(--background-primary);
+.container > *:nth-child(2) {
+  background-color: var(--background-primary);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: bold;
 }
