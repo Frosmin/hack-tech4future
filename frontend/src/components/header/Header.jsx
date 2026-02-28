@@ -17,7 +17,7 @@ const Header = () => {
       <article className={styles.logoContainer}>
         <div className={styles.logo}></div>
         <Link to={"/"} onClick={(event) => handleClick("/")}>
-          <h2>DermEncyclopedia</h2>
+          <h2>MediScanAI</h2>
         </Link>
       </article>
       <nav className={styles.nav}>
@@ -26,7 +26,7 @@ const Header = () => {
           className={`${currentPath === "/" ? styles.isActive : ""}`}
           onClick={() => handleClick("/")}
         >
-          Enciclopedia
+          Home
         </Link>
         <Link
           to={"/analizar"}
