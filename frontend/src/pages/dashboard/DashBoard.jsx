@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useAxios } from "../../hooks/axios";
 
 // Componente para la barra de probabilidad
@@ -23,6 +23,7 @@ function ConfidenceMeter({ value }) {
 
 export default function Dashboard() {
   const { id } = useParams(); 
+  const navigate = useNavigate(); // 1. Inicializamos useNavigate
   const { request, loading, error } = useAxios(); 
   const [data, setData] = useState(null);
 
@@ -204,7 +205,11 @@ export default function Dashboard() {
 
                 {/* Botón "Añadir Nueva Foto" al final del timeline */}
                 <div className="relative flex flex-col items-center min-w-[150px] snap-center justify-center">
-                  <button className="h-32 w-full mt-8 rounded-xl border-2 border-dashed flex flex-col items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer" style={{ borderColor: "#cbd5e1" }}>
+                  <button 
+                    onClick={() => navigate('/analizar')} 
+                    className="h-32 w-full mt-8 rounded-xl border-2 border-dashed flex flex-col items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer" 
+                    style={{ borderColor: "#cbd5e1" }}
+                  >
                     <span className="text-2xl mb-1 text-slate-400">+</span>
                     <span className="text-xs font-semibold text-slate-500">Subir Nueva</span>
                   </button>
@@ -212,10 +217,17 @@ export default function Dashboard() {
               </div>
             </div>
           ) : (
-             <div className="text-center py-10 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+             <div className="text-center py-10 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex flex-col items-center justify-center">
                <span className="text-4xl mb-3 block opacity-40">📷</span>
                <p className="text-sm font-semibold text-slate-600">Aún no hay fotos de seguimiento.</p>
-               <p className="text-xs text-slate-400 mt-1">Sube fotos aquí más tarde para registrar tu mejora.</p>
+               <p className="text-xs text-slate-400 mt-1 mb-4">Sube fotos regularmente para registrar tu mejora.</p>
+               <button 
+                 onClick={() => navigate('/analizar')}
+                 className="px-4 py-2 text-xs font-semibold text-white rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
+                 style={{ background: "linear-gradient(135deg, #0ea5e9, #6366f1)" }}
+               >
+                 Subir nueva foto
+               </button>
              </div>
           )}
         </div>
