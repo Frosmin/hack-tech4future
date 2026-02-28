@@ -8,7 +8,9 @@ import (
 
 type Photo struct {
 	gorm.Model
-	PhotoUrl    string    `json:"photoUrl" gorm:"not null"`
-	DateTaken   time.Time `json:"dateTaken"`
-	PatologiaID uint      `json:"patologiaId"`
+	PhotoUrl        string    `json:"photoUrl" gorm:"not null"`
+	DateTaken       time.Time `json:"dateTaken"`
+	PatologiaID     uint      `json:"patologiaId"`
+	EvolutionStatus string    `json:"evolutionStatus"`
+	AnalysisSummary string    `json:"analysisSummary"`
 }

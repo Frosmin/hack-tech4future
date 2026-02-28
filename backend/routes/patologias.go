@@ -206,3 +206,88 @@ func GetMisPatologias(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resultado)
 }
+
+func ComparePatologias(c *gin.Context) {
+	// 1. Validar el usuario
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuario no autorizado"})
+		return
+	}
+
+	patologiaID := c.Param("id")
+
+	// 2. Comprobar que la patología existe y obtener su descripción para darle contexto a la IA
+	var patologia models.Patologia
+	if err := db.DB.Where("id = ? AND user_id = ?", patologiaID, userID).First(&patologia).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Patología no encontrada"})
+		return
+	}
+
+	// 3. Buscar la última foto de esta patología (ordenando por fecha de creación descendentemente)
+	var ultimaFoto models.Photo
+	if err := db.DB.Where("patologia_id = ?", patologiaID).Order("created_at desc").First(&ultimaFoto).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "No hay foto anterior registrada para comparar"})
+		return
+	}
+
+	// 4. Descargar los bytes de la foto antigua desde Cloudinary/URL
+	resp, err := http.Get(ultimaFoto.PhotoUrl)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al descargar foto anterior"})
+		return
+	}
+	defer resp.Body.Close()
+	oldImageBytes, _ := io.ReadAll(resp.Body)
+
+	// 5. Leer la foto NUEVA que envía el usuario en el request
+	fileHeader, err := c.FormFile("image")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Se requiere subir una 'image'"})
+		return
+	}
+	file, _ := fileHeader.Open()
+	defer file.Close()
+	newImageBytes, _ := io.ReadAll(file)
+
+	// Regresar el puntero a 0 para que UploadImage pueda subir la imagen posteriormente
+	file.Seek(0, 0)
+
+	// 6. Enviar ambas fotos a Gemini para comparación (Requieres crear este servicio)
+	aiResponse, err := services.CompareEvolution(oldImageBytes, newImageBytes, patologia.Description)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error comparando con IA: " + err.Error()})
+		return
+	}
+
+	// 7. Decodificar la respuesta JSON de la IA
+	var evolutionData struct {
+		EvolutionStatus string `json:"evolutionStatus"`
+		AnalysisSummary string `json:"analysisSummary"`
+	}
+	json.Unmarshal([]byte(aiResponse), &evolutionData)
+
+	// 8. Subir la imagen actual a Cloudinary
+	uploadedUrl, err := services.UploadImage(file, "evolucion_patologias")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al subir la nueva imagen a la nube"})
+		return
+	}
+
+	// 9. Guardar la nueva foto y el análisis de la IA en la BD
+	nuevaFoto := models.Photo{
+		PhotoUrl:        uploadedUrl,
+		DateTaken:       time.Now(),
+		PatologiaID:     patologia.ID,
+		EvolutionStatus: evolutionData.EvolutionStatus,
+		AnalysisSummary: evolutionData.AnalysisSummary,
+	}
+
+	if err := db.DB.Create(&nuevaFoto).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar el nuevo registro base de datos"})
+		return
+	}
+
+	// 10. Devolver la foto nueva con sus diagnósticos para el frontend
+	c.JSON(http.StatusOK, nuevaFoto)
+}
