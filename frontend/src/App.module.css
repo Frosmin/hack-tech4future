@@ -4,3 +4,7 @@
     background-color: #f8fafc;
     min-height: 100dvh;
 }
+
+.container > *:nth-child(2){
+    background-color: var(--background-primary);
+}

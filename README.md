@@ -1,1 +1,4 @@
-# hack-tech4future
+pip freeze > requirements.txt
+PROYECT URL : https://tkfpqovvlaimpinwcixg.supabase.co
+Publishable Key : sb_publishable_rqkEq6wpyS8_taxGqSRRTg_JGz9GlYV
+Anon Key (Legacy) : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrZnBxb3Z2bGFpbXBpbndjaXhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDk3OTQsImV4cCI6MjA4Nzc4NTc5NH0.JjZVFgHrQBMyE6eErSq9kS0AOmTlhii9heG8FetUOSk

@@ -1,0 +1,22 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+export const useUser = create(
+  persist(
+    (set) => ({
+      user: null,
+
+      setUser: (user) => set({ user }),
+
+      updateUser: (data) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...data } : null,
+        })),
+
+      logout: () => set({ user: null }),
+    }),
+    {
+      name: "user-storage",
+    }
+  )
+);

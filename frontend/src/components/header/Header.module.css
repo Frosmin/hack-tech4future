@@ -38,6 +38,7 @@
   border-radius: 15px;
   padding: 1rem 2rem;
   background: var(--button-primary);
+  color: var(--text-inverse);
   font-weight: 600;
   font-size: 1rem;
 }
