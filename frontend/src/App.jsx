@@ -23,7 +23,6 @@ function App() {
         <Route path='/dashboard/:id' element={<Dashboard />} />
         <Route path='/about' element={<About />} />
         <Route path='/consultas' element={<MisConsultas />} />
-        <Route path='/consulta/:id' element={<Home />} />
       </Routes>
       <footer>
         <Footer />

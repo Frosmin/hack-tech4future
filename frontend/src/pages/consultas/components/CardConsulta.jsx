@@ -1,10 +1,10 @@
 import styles from './CardConsulta.module.css'
 import { useNavigate } from 'react-router'
 
-const CardConsulta = ({ img, title, gravity, recuperation }) => {
+const CardConsulta = ({ img, title, gravity, id }) => {
   const navigate = useNavigate()
   const handleClick = () => {
-    navigate('/')
+    navigate(`/dashboard/${id}`)
   }
   return (
     <div

@@ -24,10 +24,11 @@ const MisConsultas = () => {
       });
 
       if (result) {
-        setList(data)
+        setList(result)
       }
-      console.log(list)
+      console.log(result)
     }
+    getData()
   }, [])
 
   return (
@@ -41,6 +42,7 @@ const MisConsultas = () => {
               img={e.Image}
               title={e.title}
               gravity={e.gravity}
+              id={e.id}
             />
           ))
         }
