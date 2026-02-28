@@ -9,7 +9,7 @@ const footerText =
 const Footer = () => {
   const { updatePath } = usePath();
   const { user } = useUser();
- 
+
   const handleClick = (path) => {
     updatePath(path);
   };
@@ -28,20 +28,16 @@ const Footer = () => {
           <Link to={"/"} onClick={() => updatePath("/")}>
             Inicio
           </Link>
-          {
-            user && (
-              <Link to={"/analizar/0"} onClick={() => updatePath("/analizar")}>
-                Analizar con IA
-              </Link>
-            )
-          }
-          {
-            user && (
-              <Link to={"/consultas"} onClick={() => updatePath("/consultas")}>
-                Mis consultas
-              </Link>
-            )
-          }
+          {user && (
+            <Link to={"/analizar/0"} onClick={() => updatePath("/analizar")}>
+              Analizar con IA
+            </Link>
+          )}
+          {user && (
+            <Link to={"/consultas"} onClick={() => updatePath("/consultas")}>
+              Mis consultas
+            </Link>
+          )}
         </article>
         <article className={styles.contactos}>
           <h3>Contáctanos</h3>
@@ -67,17 +63,17 @@ const Footer = () => {
               target="_blank"
               rel="noopener"
             >
-              <img src="facebook.svg" alt="Facebook icon" />
+              <img src="/facebrook.svg" alt="Facebook icon" />
             </Link>
             <Link
               to={"https://www.instagram.com"}
               target="_blank"
               rel="noopener"
             >
-              <img src="instagram.svg" alt="Instagram icon" />
+              <img src="/instagram.svg" alt="Instagram icon" />
             </Link>
             <Link to={"https://www.tiktok.com"} target="_blank" rel="noopener">
-              <img src="tiktok.svg" alt="Tiktok icon" />
+              <img src="/tiktok.svg" alt="Tiktok icon" />
             </Link>
           </div>
         </article>
