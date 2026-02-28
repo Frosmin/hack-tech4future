@@ -8,6 +8,11 @@ const Header = () => {
   const handleClick = (path) => {
     updatePath(path)
   }
+
+  const handleButton = () => {
+    updatePath('/login')
+    
+  }
   return (
     <article className={styles.container}>
       <article className={styles.logoContainer}>
@@ -37,7 +42,13 @@ const Header = () => {
         </Link>
       </nav>
       <article className={styles.right}>
-        <button className={styles.button}>Log In</button>
+        <Link
+          className={styles.button}
+          onClick={handleButton}
+          to={'/login'}
+        >
+          Log In
+        </Link>
       </article>
     </article>
   )

@@ -5,6 +5,7 @@ import Footer from "./components/footer/Footer"
 import Home from './pages/home/Home'
 import Analizar from './pages/analizar/Analizar'
 import About from './pages/about/About'
+import Login from './pages/login/login'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
       </header>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='login' element={<Login />} />
         <Route path='/analizar' element={<Analizar />} />
         <Route path='/about' element={<About />} />
       </Routes>
