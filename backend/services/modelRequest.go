@@ -75,15 +75,20 @@ func GenerateAnswerWithImage(question string, imageBytes []byte, imageFormat str
     
     El JSON debe seguir esta estructura exacta:
     {
-        "titulo": "Nombre técnico de la posible condición o 'Sin hallazgos significativos'",
-        "descripcion": "Explicación detallada de lo que observas visualmente (color, forma, textura, ubicación)",
-        "gravedad": "Baja" | "Moderada" | "Alta" | "Desconocida",
-        "recomendacion": "Consejos prácticos inmediatos (ej: 'Aplicar protector solar', 'Acudir a urgencias', 'Vigilar cambios')",
-        "probabilidad": Un número entero del 0 al 100 indicando tu nivel de certeza,
-        "es_medica": true si la imagen parece ser de una condición médica o parte del cuerpo, false si es una foto irrelevante (un paisaje, un coche, etc.)
+        "title": "Nombre técnico de la posible condición o 'Sin hallazgos significativos'",
+        "description": "Explicación detallada de lo que observas visualmente (color, forma, textura, ubicación)",
+        "gravity": "Baja" | "Moderada" | "Alta" | "Desconocida",
+        "recommendation": "no digas que valla donde un doctor, solo responde el tratamiento (ejmplo si es pie de atleta, responde: 'Mantener la zona seca, aplicar crema antifúngica y evitar compartir calzado')",
+        "provability": Un número entero del 0 al 100 indicando tu nivel de certeza,
+        "isMedical": true si la imagen parece ser de una condición médica o parte del cuerpo, false si es una foto irrelevante (un paisaje, un coche, etc.),
+		"compuestos": [
+			{
+				"name": "Nombre del compuesto, esto es una lista de compuestos quimicos que estan en medicamentos que puede ayudar a tratar la patologia, si no se puede identificar un compuesto, dejar la lista vacia"
+			}
+		]
     }
 
-    Si la imagen no es clara o no es médica, pon "es_medica": false y explica por qué en "descripcion".
+    Si la imagen no es clara o no es médica, pon "isMedical": false y explica por qué en "description".
     `
 
 	// 3. Preparar la consulta del usuario
