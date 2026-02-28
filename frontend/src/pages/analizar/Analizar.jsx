@@ -6,7 +6,6 @@ import ImageTypeSelector from "./components/ImageTypeSelector";
 import FloatingParticle from "../home/components/FloatingParticle";
 import { PARTICLES } from "../../utils/homeData";
 import ResultsPage from "./ResultsPage";
-import usePath from "../../stores/path.store";
 
 const SpinnerIcon = () => (
   <svg
@@ -324,7 +323,7 @@ export default function AnalyzePage() {
                 className="text-xs font-semibold mb-2"
                 style={{ color: "#92400e" }}
               >
-                💡 Tips para mejores resultados
+                Tips para mejores resultados
               </p>
               <ul
                 className="text-xs leading-relaxed space-y-1"
@@ -335,6 +334,35 @@ export default function AnalyzePage() {
                 <li>• Evita sombras o reflejos</li>
                 <li>• En radiografías: usa la imagen original</li>
               </ul>
+            </div>
+            <div
+              className="rounded-2xl p-5 mb-12 border flex items-start gap-3"
+              style={{
+                background: "rgba(254, 243, 199, 0.5)",
+                borderColor: "#fde68a",
+              }}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="mt-0.5 shrink-0"
+              >
+                <path
+                  d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"
+                  stroke="#d97706"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <p className="text-sm" style={{ color: "#92400e" }}>
+                <strong>Aviso importante:</strong> MediScanAI es una herramienta
+                de apoyo educativa y no reemplaza el diagnóstico de un
+                profesional médico. Consulta siempre a un especialista ante
+                cualquier preocupación de salud.
+              </p>
             </div>
           </div>
         </div>
