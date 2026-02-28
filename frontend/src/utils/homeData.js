@@ -67,17 +67,17 @@ export const FEATURE_CARDS = [
     ctaText: "Analizar imagen cutánea",
     ctaColor: "#0ea5e9",
   },
-  {
-    id: "xray",
-    accentColor: "indigo",
-    iconBg: "linear-gradient(135deg, #ede9fe, #ddd6fe)",
-    title: "Interpretación de radiografías",
-    description:
-      "Identifica regiones de interés en la imagen. La IA señala zonas con posibles irregularidades y describe qué podría indicar cada hallazgo.",
-    tags: ["Tórax", "Huesos", "Cráneo", "Columna vertebral"],
-    ctaText: "muy pronto",
-    ctaColor: "#6366f1",
-  },
+  // {
+  //   id: "xray",
+  //   accentColor: "indigo",
+  //   iconBg: "linear-gradient(135deg, #ede9fe, #ddd6fe)",
+  //   title: "Interpretación de radiografías",
+  //   description:
+  //     "Identifica regiones de interés en la imagen. La IA señala zonas con posibles irregularidades y describe qué podría indicar cada hallazgo.",
+  //   tags: ["Tórax", "Huesos", "Cráneo", "Columna vertebral"],
+  //   ctaText: "muy pronto",
+  //   ctaColor: "#6366f1",
+  // },
 ];
 
 /**
