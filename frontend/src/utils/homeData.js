@@ -75,7 +75,7 @@ export const FEATURE_CARDS = [
     description:
       "Identifica regiones de interés en la imagen. La IA señala zonas con posibles irregularidades y describe qué podría indicar cada hallazgo.",
     tags: ["Tórax", "Huesos", "Cráneo", "Columna vertebral"],
-    ctaText: "Analizar radiografía",
+    ctaText: "muy pronto",
     ctaColor: "#6366f1",
   },
 ];

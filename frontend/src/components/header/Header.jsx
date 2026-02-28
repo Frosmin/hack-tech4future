@@ -26,7 +26,7 @@ const Header = () => {
       <article className={styles.logoContainer}>
         <div className={styles.logo}></div>
         <Link to={"/"} onClick={(event) => handleClick("/")}>
-          <h2>MediScanAI</h2>
+          <img src="/mainLogo.png" alt="" className="w-40" />
         </Link>
       </article>
       <nav className={styles.nav}>
