@@ -24,7 +24,7 @@ const Footer = () => {
         <article className={styles.enlaces}>
           <h3>Enlaces</h3>
           <Link to={"/"} onClick={() => updatePath("/")}>
-            Enciclopedia
+            Home
           </Link>
           <Link to={"/analizar"} onClick={() => updatePath("/analizar")}>
             Analizar con IA

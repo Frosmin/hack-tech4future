@@ -7,7 +7,7 @@ import AnalyzePage from './pages/analizar/Analizar'
 import About from './pages/about/About'
 import MisConsultas from './pages/consultas/MisConsultas'
 import Login from './pages/login/Login'
-import Dashboard from './pages/dashboard/Dashboard'
+import Dashboard from './pages/dashboard/DashBoard'
 
 function App() {
 

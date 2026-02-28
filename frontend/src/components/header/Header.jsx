@@ -37,20 +37,6 @@ const Header = () => {
         >
           Analizar con IA
         </Link>
-        <Link
-          to={"/about"}
-          className={`${currentPath === "/about" ? styles.isActive : ""}`}
-          onClick={() => handleClick("/about")}
-        >
-          About Us
-        </Link>
-        <Link
-          to={"/dashboard"}
-          className={`${currentPath === "/dashboard" ? styles.isActive : ""}`}
-          onClick={() => handleClick("/dashboard")}
-        >
-          Historial
-        </Link>
         {
           user && (
             <Link
