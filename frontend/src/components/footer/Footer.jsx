@@ -17,7 +17,7 @@ const Footer = () => {
         <article className={styles.info}>
           <div className={styles.logoContainer}>
             <div className={styles.logo} />
-            <h3>DermEncyclopedia</h3>
+            <h3>MediScanAI</h3>
           </div>
           <p>{footerText}</p>
         </article>
