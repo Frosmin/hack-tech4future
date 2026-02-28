@@ -5,7 +5,8 @@ import Footer from "./components/footer/Footer"
 import Home from './pages/home/Home'
 import AnalyzePage from './pages/analizar/Analizar'
 import About from './pages/about/About'
-import Login from './pages/login/login'
+import MisConsultas from './pages/consultas/MisConsultas'
+import Login from './pages/login/Login'
 
 function App() {
 
@@ -19,6 +20,8 @@ function App() {
         <Route path='login' element={<Login />} />
         <Route path='/analizar' element={<AnalyzePage />} />
         <Route path='/about' element={<About />} />
+        <Route path='/consultas' element={<MisConsultas />} />
+        <Route path='/consulta/:id' element={<Home />} />
       </Routes>
       <footer>
         <Footer />

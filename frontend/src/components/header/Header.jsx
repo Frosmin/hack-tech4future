@@ -1,9 +1,11 @@
 import usePath from "../../stores/path.store";
+import { useUser } from "../../stores/user.store";
 import styles from "./Header.module.css";
 import { Link } from "react-router";
 
 const Header = () => {
   const { currentPath, updatePath } = usePath();
+  const { user } = useUser();
 
   const handleClick = (path) => {
     updatePath(path);
@@ -42,6 +44,17 @@ const Header = () => {
         >
           About Us
         </Link>
+        {
+          user && (
+            <Link
+              to={"/consultas"}
+              className={`${currentPath === "/consultas" ? styles.isActive : ""}`}
+              onClick={() => handleClick("/consultas")}
+            >
+              Mis consultas
+            </Link>
+          )
+        }
       </nav>
       <article className={styles.right}>
         <Link className={styles.button} onClick={handleButton} to={"/login"}>
