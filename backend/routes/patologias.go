@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -59,6 +60,12 @@ func PostPatologia(c *gin.Context) {
 		return
 	}
 
+	photoURL, err := services.UploadImage(bytes.NewReader(imageBytes), "patologias")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al subir imagen a Cloudinary: " + err.Error()})
+		return
+	}
+
 	mimeType := http.DetectContentType(imageBytes)
 	format := strings.TrimPrefix(mimeType, "image/")
 
@@ -105,7 +112,12 @@ func PostPatologia(c *gin.Context) {
 		Provability: geminiData.Provability,
 		IsMedical:   geminiData.IsMedical,
 		UserID:      client.UserID,
-		Compuestos:  compuestosParaGuardar, // GORM asignará el ID de las patologías automáticamente
+		Compuestos:  compuestosParaGuardar,
+		Photos: []models.Photo{
+			{
+				PhotoUrl: photoURL,
+			},
+		},
 	}
 
 	// 4. Guardar en la base de datos

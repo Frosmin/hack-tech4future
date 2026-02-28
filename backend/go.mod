@@ -3,7 +3,7 @@ module github.com/Frosmin/backend
 go 1.25.0
 
 require (
-	github.com/cloudinary/cloudinary-go/v2 v2.14.0
+	github.com/cloudinary/cloudinary-go/v2 v2.14.1
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.10.1
 	github.com/golang-jwt/jwt/v5 v5.3.0
