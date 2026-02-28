@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageUploadZone from "./components/ImageUploadZone";
 import ImageTypeSelector from "./components/ImageTypeSelector";
 import FloatingParticle from "../home/components/FloatingParticle";
 import { PARTICLES } from "../../utils/homeData";
 import ResultsPage from "./ResultsPage"; // Importamos el generador de resultados
+import usePath from "../../stores/path.store";
 
 const SpinnerIcon = () => (
   <svg
@@ -43,9 +44,14 @@ export default function AnalyzePage() {
   const [type, setType] = useState(null); // "skin" | "xray"
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
+  const { updatePath } = usePath()
+  useEffect(() => {
+    updatePath('/analizar')
+  }, [])
+
   // Nuevo Estado para guardar la respuesta de Go
-  const [analysisResult, setAnalysisResult] = useState(null); 
+  const [analysisResult, setAnalysisResult] = useState(null);
 
   const canAnalyze = files.length > 0 && type !== null;
 
@@ -63,19 +69,19 @@ export default function AnalyzePage() {
     // Despachamos los resultados a nuestro nuevo estado
     const mockResults = generateMockResults(type, files);
     setLoading(false);
-    setAnalysisResult({ files, type, results: mockResults });  
+    setAnalysisResult({ files, type, results: mockResults });
   };
 
   // Render condicional: Si hay resultados, mostrar ResultPage en vez del formulario
   if (analysisResult) {
     return (
-      <ResultsPage 
-        data={analysisResult} 
+      <ResultsPage
+        data={analysisResult}
         onNewAnalysis={() => {
           setAnalysisResult(null);
           setFiles([]);
           setType(null);
-        }} 
+        }}
       />
     );
   }

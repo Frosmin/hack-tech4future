@@ -31,7 +31,7 @@ const Header = () => {
           Home
         </Link>
         <Link
-          to={"/analizar"}
+          to={"/analizar/0"}
           className={`${currentPath === "/analizar" ? styles.isActive : ""}`}
           onClick={() => handleClick("/analizar")}
         >
@@ -44,7 +44,7 @@ const Header = () => {
         >
           About Us
         </Link>
-                <Link
+        <Link
           to={"/dashboard"}
           className={`${currentPath === "/dashboard" ? styles.isActive : ""}`}
           onClick={() => handleClick("/dashboard")}
