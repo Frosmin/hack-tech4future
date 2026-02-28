@@ -23,6 +23,7 @@ func SetupRouter() *gin.Engine {
 	api.POST("/client", PostClientHandler)
 
 	api.POST("/chat", ChatHandler)
+	api.POST("/chat/image", ChatImageHandler)
 
 	// rutas protegidas
 	protected := r.Group("/protected")

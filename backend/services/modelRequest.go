@@ -27,7 +27,7 @@ func GenerateAnswer(question string) (string, error) {
 	defer client.Close()
 
 	// Seleccionar el modelo (gemini-pro es para texto)
-	model := client.GenerativeModel("gemini-1.5-flash")
+	model := client.GenerativeModel("gemini-2.5-flash")
 
 	// Generar respuesta
 	resp, err := model.GenerateContent(ctx, genai.Text(question))
@@ -44,4 +44,73 @@ func GenerateAnswer(question string) (string, error) {
 	}
 
 	return "", errors.New("no se pudo obtener una respuesta válida de Gemini")
+}
+
+func GenerateAnswerWithImage(question string, imageBytes []byte, imageFormat string) (string, error) {
+	ctx := context.Background()
+	apiKey := os.Getenv("GEMINI_KEY")
+
+	if apiKey == "" {
+		return "", errors.New("GEMINI_KEY no está configurada")
+	}
+
+	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+	if err != nil {
+		return "", fmt.Errorf("error al crear cliente Gemini: %v", err)
+	}
+	defer client.Close()
+
+	model := client.GenerativeModel("gemini-2.5-flash")
+
+	// 1. Configuración CRÍTICA: Forzar respuesta en JSON
+	model.ResponseMIMEType = "application/json"
+
+	// 2. Definir el System Prompt (El cerebro del experto)
+	systemInstruction := `
+    Actúa como un asistente médico experto en dermatología y análisis visual clínico.
+    Tu tarea es analizar la imagen proporcionada buscando anomalías, lesiones cutáneas o signos clínicos visibles.
+
+    INSTRUCCIONES DE RESPUESTA:
+    Responde estricta y únicamente con un objeto JSON válido. No uses bloques de código markdown (como '''json), solo el raw JSON.
+    
+    El JSON debe seguir esta estructura exacta:
+    {
+        "titulo": "Nombre técnico de la posible condición o 'Sin hallazgos significativos'",
+        "descripcion": "Explicación detallada de lo que observas visualmente (color, forma, textura, ubicación)",
+        "gravedad": "Baja" | "Moderada" | "Alta" | "Desconocida",
+        "recomendacion": "Consejos prácticos inmediatos (ej: 'Aplicar protector solar', 'Acudir a urgencias', 'Vigilar cambios')",
+        "probabilidad": Un número entero del 0 al 100 indicando tu nivel de certeza,
+        "es_medica": true si la imagen parece ser de una condición médica o parte del cuerpo, false si es una foto irrelevante (un paisaje, un coche, etc.)
+    }
+
+    Si la imagen no es clara o no es médica, pon "es_medica": false y explica por qué en "descripcion".
+    `
+
+	// 3. Preparar la consulta del usuario
+	if question == "" {
+		question = "Realiza un diagnóstico visual detallado de esta imagen."
+	}
+
+	// Combinamos la instrucción del sistema con la pregunta específica
+	fullPromptText := fmt.Sprintf("%s\n\nConsulta adicional del usuario: %s", systemInstruction, question)
+
+	// 4. Crear las parte del mensaje (Imagen + Prompt Completo)
+	prompt := []genai.Part{
+		genai.ImageData(imageFormat, imageBytes),
+		genai.Text(fullPromptText),
+	}
+
+	// 5. Enviar a Gemini
+	resp, err := model.GenerateContent(ctx, prompt...)
+	if err != nil {
+		return "", fmt.Errorf("error al generar contenido: %v", err)
+	}
+
+	if len(resp.Candidates) > 0 && len(resp.Candidates[0].Content.Parts) > 0 {
+		if txt, ok := resp.Candidates[0].Content.Parts[0].(genai.Text); ok {
+			return string(txt), nil
+		}
+	}
+
+	return "", errors.New("no se pudo obtener una respuesta válida")
 }

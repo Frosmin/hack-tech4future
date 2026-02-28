@@ -46,5 +46,19 @@ POST http://localhost:8080/public/chat
 Content-Type: application/json
 
 {
-  "question": "¿Cómo puedo cuidar mi salud alimenticia?"
+  "question": "estas funcionando? solo devuelveme un si o no"
 }
+
+# ... existing code ...
+
+### Prueba de imagen (Ajusta la ruta de la imagen)
+POST http://localhost:8080/public/chat/image
+Content-Type: multipart/form-data; boundary=MymeBoundary
+
+--MymeBoundary
+Content-Disposition: form-data; name="question"
+
+¿Qué se ve en esta imagen?
+--MymeBoundary
+Content-Disposition: form-data; name="image"; filename="prueba-ia.jpg"
+Content-Type: image/jpeg
