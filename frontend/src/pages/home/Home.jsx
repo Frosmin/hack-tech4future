@@ -3,6 +3,8 @@ import Button from "../../components/ui/Button";
 import FeatureCard from "./components/FeatureCard";
 import StepCard from "./components/StepCard";
 import { FEATURE_CARDS, STEPS, STATS } from "../../utils/homeData";
+import { useNavigate } from "react-router";
+import usePath from "../../stores/path.store";
 
 const SkinIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
@@ -79,6 +81,13 @@ const ArrowIcon = ({ color = "currentColor" }) => (
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const { updatePath } = usePath();
+  const navitage = useNavigate();
+
+  const handleButton = (event) =>{
+    updatePath("/analizar");
+    navitage("/analizar/0");
+  }
 
   useEffect(() => {
     setMounted(true);
@@ -149,7 +158,11 @@ export default function Home() {
           </p>
 
           <div className="flex relative items-center justify-center gap-4 mb-20">
-            <Button variant="primary" icon={<UploadIcon />}>
+            <Button 
+              variant="primary" 
+              icon={<UploadIcon />}
+              onClick={handleButton}
+            >
               Subir imagen
             </Button>
           </div>
