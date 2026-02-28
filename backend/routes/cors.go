@@ -29,6 +29,7 @@ func SetupRouter() *gin.Engine {
 	protected.Use(middlewares.AuthMiddleware())
 	{
 		protected.POST("/chat/image", PostPatologia)
+		protected.GET("/patologia/:id", GetPatologiaByID)
 	}
 	return r
 }

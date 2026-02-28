@@ -6,6 +6,7 @@ import Home from './pages/home/Home'
 import AnalyzePage from './pages/analizar/Analizar'
 import About from './pages/about/About'
 import Login from './pages/login/login'
+import Dashboard from './pages/dashboard/Dashboard'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='login' element={<Login />} />
         <Route path='/analizar' element={<AnalyzePage />} />
+        <Route path='/dashboard/:id' element={<Dashboard />} />
         <Route path='/about' element={<About />} />
       </Routes>
       <footer>
