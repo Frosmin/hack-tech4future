@@ -56,3 +56,18 @@ export function useAxios() {
 
 //   console.log("Respuesta:", result);
 // };
+
+// const { data, error, loading, request } = useAxios();
+// const uploadPhoto = async (file) => {
+//   const form = new FormData();
+//   form.append("photo", file);
+
+//   await request({
+//     method: "POST",
+//     url: "/upload",
+//     data: form,
+//     headers: {
+//       "Content-Type": "multipart/form-data"
+//     }
+//   });
+// };
