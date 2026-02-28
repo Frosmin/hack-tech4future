@@ -120,51 +120,7 @@ export default function Home() {
         }}
       />
 
-      {/* ── NAV ────────────────────────────────────────────────────────────── */}
-      <nav className="relative z-10 flex items-center justify-between px-8 py-5 max-w-6xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #0ea5e9, #6366f1)" }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-          <span
-            className="text-lg font-bold tracking-tight"
-            style={{ color: "#0f172a" }}
-          >
-            MediScan<span style={{ color: "#0ea5e9" }}>AI</span>
-          </span>
-        </div>
-
-        <div className="flex items-center gap-6">
-          {["Cómo funciona", "Sobre nosotros"].map((link) => (
-            <a
-              key={link}
-              href="#"
-              className="text-sm font-medium transition-colors"
-              style={{ color: "#64748b" }}
-              onMouseEnter={(e) => (e.target.style.color = "#0ea5e9")}
-              onMouseLeave={(e) => (e.target.style.color = "#64748b")}
-            >
-              {link}
-            </a>
-          ))}
-          <Button variant="primary">Iniciar análisis</Button>
-        </div>
-      </nav>
-
-      {/* ── HERO ───────────────────────────────────────────────────────────── */}
       <main className="relative z-10 max-w-6xl mx-auto px-8 pt-16 pb-8">
-        {/* Badge */}
         <div className="flex justify-center mb-6">
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border"
@@ -178,7 +134,7 @@ export default function Home() {
               className="w-1.5 h-1.5 rounded-full animate-pulse"
               style={{ background: "#0ea5e9" }}
             />
-            Inteligencia Artificial Médica · Hackathon 2025
+            IA Médica · Hackathon 2026
           </span>
         </div>
 
@@ -223,7 +179,6 @@ export default function Home() {
           </Button>
         </div>
 
-        {/* ── FEATURE CARDS ──────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
           {FEATURE_CARDS.map((card) => (
             <FeatureCard
@@ -237,7 +192,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* ── STATS ──────────────────────────────────────────────────────── */}
         <div
           className="rounded-2xl p-8 mb-20 border"
           style={{
@@ -263,7 +217,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── HOW IT WORKS ───────────────────────────────────────────────── */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-3" style={{ color: "#0f172a" }}>
             ¿Cómo funciona?
@@ -279,7 +232,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* ── DISCLAIMER ─────────────────────────────────────────────────── */}
         <div
           className="rounded-2xl p-5 mb-12 border flex items-start gap-3"
           style={{
@@ -310,21 +262,6 @@ export default function Home() {
           </p>
         </div>
       </main>
-
-      {/* ── FOOTER ─────────────────────────────────────────────────────────── */}
-      <footer
-        className="relative z-10 border-t py-8"
-        style={{ borderColor: "#e2e8f0" }}
-      >
-        <div className="max-w-6xl mx-auto px-8 flex items-center justify-between">
-          <span className="text-sm" style={{ color: "#94a3b8" }}>
-            © 2025 MediScanAI · Proyecto Hackathon IA
-          </span>
-          <span className="text-sm" style={{ color: "#94a3b8" }}>
-            Hecho con IA · Solo fines educativos
-          </span>
-        </div>
-      </footer>
     </div>
   );
 }
