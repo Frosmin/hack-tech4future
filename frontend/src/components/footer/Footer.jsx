@@ -63,7 +63,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener"
             >
-              <img src="/facebrook.svg" alt="Facebook icon" />
+              <img src="/facebook.svg" alt="Facebook icon" />
             </Link>
             <Link
               to={"https://www.instagram.com"}
