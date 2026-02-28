@@ -119,3 +119,48 @@ func GenerateAnswerWithImage(question string, imageBytes []byte, imageFormat str
 
 	return "", errors.New("no se pudo obtener una respuesta válida")
 }
+
+func CompareEvolution(oldImageBytes, newImageBytes []byte, contextInfo string) (string, error) {
+	ctx := context.Background()
+	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("GEMINI_KEY")))
+	if err != nil {
+		return "", err
+	}
+	defer client.Close()
+
+	model := client.GenerativeModel("gemini-2.5-flash")
+	model.ResponseMIMEType = "application/json"
+
+	systemInstruction := `
+    Actúa como un dermatólogo clínico experto. Te proporcionaré 2 imágenes de la misma lesión.
+    Imagen 1 (Anterior) y Imagen 2 (Actual - Nueva).
+    
+    Devuelve estrictamente un JSON:
+    {
+        "evolutionStatus": "Mejora", "Empeoramiento" o "Sin cambios",
+        "analysisSummary": "Explica brevemente los cambios."
+    }
+    `
+
+	prompt := []genai.Part{
+		genai.Text(systemInstruction),
+		genai.Text("Contexto de la patología inicial: " + contextInfo),
+		genai.Text("--- IMAGEN 1 (ANTERIOR) ---"),
+		genai.ImageData("jpeg", oldImageBytes),
+		genai.Text("--- IMAGEN 2 (ACTUAL) ---"),
+		genai.ImageData("jpeg", newImageBytes),
+		genai.Text("Analiza la evolución entre la Imagen 1 y la Imagen 2."),
+	}
+
+	resp, err := model.GenerateContent(ctx, prompt...)
+	if err != nil {
+		return "", err
+	}
+
+	if len(resp.Candidates) > 0 && len(resp.Candidates[0].Content.Parts) > 0 {
+		if txt, ok := resp.Candidates[0].Content.Parts[0].(genai.Text); ok {
+			return string(txt), nil
+		}
+	}
+	return "", errors.New("respuesta nula de IA")
+}
