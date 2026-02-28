@@ -42,6 +42,13 @@ const Header = () => {
         >
           About Us
         </Link>
+                <Link
+          to={"/dashboard"}
+          className={`${currentPath === "/dashboard" ? styles.isActive : ""}`}
+          onClick={() => handleClick("/dashboard")}
+        >
+          Historial
+        </Link>
       </nav>
       <article className={styles.right}>
         <Link className={styles.button} onClick={handleButton} to={"/login"}>
