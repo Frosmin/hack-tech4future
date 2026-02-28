@@ -131,7 +131,7 @@ export default function AnalyzePage() {
       className="min-h-screen relative overflow-hidden"
       style={{
         background:
-          "linear-gradient(135deg,#f0f9ff 0%,#e8f4fe 30%,#f5f3ff 70%,#faf5ff 100%)",
+          "linear-gradient(135deg,#dbeafe 0%,#d0e8ff 30%,#e9d5ff 70%,#f3e8ff 100%)",
         fontFamily: "'Georgia', serif",
       }}
     >
