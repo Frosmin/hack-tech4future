@@ -28,30 +28,31 @@ const Header = () => {
           className={`${currentPath === "/" ? styles.isActive : ""}`}
           onClick={() => handleClick("/")}
         >
-          Home
+          Inicio
         </Link>
-        <Link
-          to={"/analizar/0"}
-          className={`${currentPath === "/analizar/0" ? styles.isActive : ""}`}
-          onClick={() => handleClick("/analizar/0")}
-        >
-          Analizar con IA
-        </Link>
-        {
-          user && (
-            <Link
-              to={"/consultas"}
-              className={`${currentPath === "/consultas" ? styles.isActive : ""}`}
-              onClick={() => handleClick("/consultas")}
-            >
-              Mis consultas
-            </Link>
-          )
-        }
+        {user && (
+          <Link
+            to={"/analizar/0"}
+            className={`${currentPath === "/analizar/0" ? styles.isActive : ""}`}
+            onClick={() => handleClick("/analizar/0")}
+          >
+            Analizar con IA
+          </Link>
+        )}
+
+        {user && (
+          <Link
+            to={"/consultas"}
+            className={`${currentPath === "/consultas" ? styles.isActive : ""}`}
+            onClick={() => handleClick("/consultas")}
+          >
+            Mis consultas
+          </Link>
+        )}
       </nav>
       <article className={styles.right}>
         <Link className={styles.button} onClick={handleButton} to={"/login"}>
-          Log In
+          Iniciar sesión
         </Link>
       </article>
     </article>
