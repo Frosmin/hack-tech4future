@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router"; // <-- 1. Importaciones de React Router
-import { useAxios } from "../../hooks/axios"; // <-- 2. Importar el manejador HTTP
+import { useParams, useNavigate } from "react-router";
+import { useAxios } from "../../hooks/axios";
 import ImageUploadZone from "./components/ImageUploadZone";
 import ImageTypeSelector from "./components/ImageTypeSelector";
 import FloatingParticle from "../home/components/FloatingParticle";
 import { PARTICLES } from "../../utils/homeData";
-import ResultsPage from "./ResultsPage"; // Importamos el generador de resultados
+import ResultsPage from "./ResultsPage";
 import usePath from "../../stores/path.store";
 
 const SpinnerIcon = () => (
@@ -50,9 +50,9 @@ export default function AnalyzePage() {
   const [type, setType] = useState(null); // "skin" | "xray"
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   // Estado para guardar la respuesta de Go y pasarla a ResultsPage
-  const [analysisResult, setAnalysisResult] = useState(null); 
+  const [analysisResult, setAnalysisResult] = useState(null);
 
   const canAnalyze = files.length > 0 && type !== null;
 
@@ -66,33 +66,36 @@ export default function AnalyzePage() {
 
     // El backend en Go espera 'image' en el FormData
     const formData = new FormData();
-    formData.append("image", files[0]); 
+    formData.append("image", files[0]);
 
     try {
       // Condición: Si existe un id y es numéricamente diferente de "0" -> MODO COMPARACIÓN
       if (id && id !== "0") {
-        
         // 1. Enviamos el FormData al Endpoint de Evolución / Comparación
         const response = await request({
           method: "POST",
           url: `/protected/compararPatologias/${id}`, // <-- Apuntamos a la ruta exacta de tu backend
           data: formData,
-          headers: { "Content-Type": "multipart/form-data" }
+          headers: { "Content-Type": "multipart/form-data" },
         });
 
         if (response) {
-           // Éxito: Pasamos a ResultsPage indicando que es una Comparación Visual
-           setAnalysisResult({ isComparison: true, files, type, results: response, id });
+          // Éxito: Pasamos a ResultsPage indicando que es una Comparación Visual
+          setAnalysisResult({
+            isComparison: true,
+            files,
+            type,
+            results: response,
+            id,
+          });
         }
-
       } else {
-
         // Condición: Es una evaluación nueva. -> MODO NUEVA PATOLOGÍA
         const response = await request({
           method: "POST",
-          url: `/protected/chat/image`, 
+          url: `/protected/chat/image`,
           data: formData,
-          headers: { "Content-Type": "multipart/form-data" }
+          headers: { "Content-Type": "multipart/form-data" },
         });
 
         if (response && response.ID) {
@@ -110,7 +113,6 @@ export default function AnalyzePage() {
     }
   };
 
-  // Render condicional: Si hay resultados, mostrar ResultPage en vez del formulario
   if (analysisResult) {
     return (
       <ResultsPage
@@ -133,7 +135,6 @@ export default function AnalyzePage() {
         fontFamily: "'Georgia', serif",
       }}
     >
-      {/* Textura */}
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
@@ -146,12 +147,10 @@ export default function AnalyzePage() {
         <FloatingParticle key={i} style={{ ...p, position: "absolute" }} />
       ))}
 
-      {/* CONTENIDO */}
       <main className="relative z-10 max-w-5xl mx-auto px-8 pt-6 pb-16">
-        {/* Header */}
         <div className="text-center mb-10">
           <h1
-            className="text-4xl font-bold mb-2"
+            className="text-4xl mb-2"
             style={{ color: "#0f172a", letterSpacing: "-0.02em" }}
           >
             Analiza tu imagen
@@ -163,9 +162,7 @@ export default function AnalyzePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-          {/* ── LEFT: Upload + tipo ── */}
           <div className="lg:col-span-3 flex flex-col gap-6">
-            {/* Sección tipo */}
             <div
               className="rounded-2xl p-6 border"
               style={{
@@ -200,9 +197,7 @@ export default function AnalyzePage() {
             </div>
           </div>
 
-          {/* ── RIGHT: Resumen + acción ── */}
           <div className="lg:col-span-2 flex flex-col gap-4 lg:sticky lg:top-8">
-            {/* Resumen */}
             <div
               className="rounded-2xl p-6 border"
               style={{
@@ -217,7 +212,6 @@ export default function AnalyzePage() {
                 Resumen del análisis
               </p>
 
-              {/* Tipo */}
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs" style={{ color: "#94a3b8" }}>
                   Tipo
@@ -346,7 +340,6 @@ export default function AnalyzePage() {
         </div>
       </main>
 
-      {/* Animación barra de progreso */}
       <style>{`
         @keyframes progress {
           0%   { width: 0% }
@@ -358,13 +351,17 @@ export default function AnalyzePage() {
   );
 }
 
-// ── Adaptando el Mock Generator para devolver la estructura exacta de Go ──
 function generateMockResults(type, files) {
   return {
     ID: 1,
-    title: type === "skin" ? "Tinea pedis interdigital" : "Posible anomalía estructural",
-    description: "Se observa eritema significativo, descamación, maceración y fisuras en los espacios interdigitales... La piel presenta una apariencia blanquecina y agrietada en estas áreas, consistente con una infección fúngica.",
-    treatment: "Mantener los pies limpios y secos, especialmente entre los dedos. Usar calcetines de algodón que absorban la humedad y cambiarlos regularmente. Aplicar un agente antifúngico tópico en la zona afectada. Evitar el uso de calzado ajustado y compartir artículos personales como toallas o calzado.",
+    title:
+      type === "skin"
+        ? "Tinea pedis interdigital"
+        : "Posible anomalía estructural",
+    description:
+      "Se observa eritema significativo, descamación, maceración y fisuras en los espacios interdigitales... La piel presenta una apariencia blanquecina y agrietada en estas áreas, consistente con una infección fúngica.",
+    treatment:
+      "Mantener los pies limpios y secos, especialmente entre los dedos. Usar calcetines de algodón que absorban la humedad y cambiarlos regularmente. Aplicar un agente antifúngico tópico en la zona afectada. Evitar el uso de calzado ajustado y compartir artículos personales como toallas o calzado.",
     gravity: "Moderada",
     provability: 95,
     isMedical: true,
@@ -373,7 +370,7 @@ function generateMockResults(type, files) {
       { ID: 1, name: "Miconazol" },
       { ID: 2, name: "Clotrimazol" },
       { ID: 3, name: "Terbinafina" },
-      { ID: 4, name: "Ketoconazol" }
-    ]
+      { ID: 4, name: "Ketoconazol" },
+    ],
   };
 }

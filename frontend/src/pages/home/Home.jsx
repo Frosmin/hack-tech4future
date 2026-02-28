@@ -120,7 +120,7 @@ export default function Home() {
         }}
       />
 
-      <main className="relative z-10 max-w-6xl mx-auto px-8 pt-16 pb-8">
+      <main className="relative z-10 max-w-6xl mx-auto px-8 pt-16 pb-8 min">
         <div className="flex justify-center mb-6">
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border"
@@ -171,11 +171,8 @@ export default function Home() {
 
         {/* CTAs */}
         <div className="flex items-center justify-center gap-4 mb-20">
-          <Button variant="primary" icon={<UploadIcon />}>
+          <Button variant="primary" icon={<UploadIcon />} >
             Subir imagen
-          </Button>
-          <Button variant="secondary" iconRight={<ArrowIcon />}>
-            Ver demo
           </Button>
         </div>
 
