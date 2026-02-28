@@ -6,9 +6,8 @@ import (
 )
 
 const (
-	RoleProveedor = "proveedor"
-	RoleCliente   = "cliente"
-	RoleAdmin     = "admin"
+	RoleCliente = "cliente"
+	RoleAdmin   = "admin"
 )
 
 type User struct {
@@ -21,12 +20,14 @@ type User struct {
 
 type Client struct {
 	gorm.Model
-	UserID       uint   `json:"-"`
-	User         User   `gorm:"foreignKey:UserID"`
-	Name         string `json:"name" gorm:"not null"`
-	ContactEmail string `json:"contactEmail" gorm:"unique;not null"`
-	ContactPhone string `json:"contactPhone" gorm:"not null"`
-	Age          int    `json:"age"`
+	UserID               uint   `json:"-"`
+	User                 User   `gorm:"foreignKey:UserID"`
+	Name                 string `json:"name" gorm:"not null"`
+	ContactEmail         string `json:"contactEmail" gorm:"unique;not null"`
+	ContactPhone         string `json:"contactPhone" gorm:"not null"`
+	Age                  int    `json:"age"`
+	BloodType            string `json:"bloodType"`
+	PreExistingCondition string `json:"preExistingCondition"`
 }
 
 // hash para password

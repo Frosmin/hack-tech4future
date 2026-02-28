@@ -1,17 +1,20 @@
 
 ### 
-POST http://localhost:8080/public/proveedor-register
+POST http://localhost:8080/public/client
 Content-Type: application/json
 
 {
   "User": {
     "email": "qweda@qwer.com",
     "password": "password123",
-    "role": "proveedor"
+    "role": "Cliente"
   },
-  "businessName": "Tieweplo",
-  "contactEmail": "com",
-  "contactPhone": "70012345"
+  "Name": "Tieweplo",
+  "contactEmail": "tieweplo@ejemplo.com",
+  "contactPhone": "70012345",
+  "age": 30,
+  "bloodType": "O+",
+  "preExistingCondition": "Ninguna"
 }
 
 ### 
@@ -19,7 +22,7 @@ POST http://localhost:8080/public/login
 Content-Type: application/json
 
 {
-"email": "cliente1@ejemplo.com",
+"email": "qweda@qwer.com",
 "password": "password123"
 }
 
@@ -49,16 +52,3 @@ Content-Type: application/json
   "question": "estas funcionando? solo devuelveme un si o no"
 }
 
-# ... existing code ...
-
-### Prueba de imagen (Ajusta la ruta de la imagen)
-POST http://localhost:8080/public/chat/image
-Content-Type: multipart/form-data; boundary=MymeBoundary
-
---MymeBoundary
-Content-Disposition: form-data; name="question"
-
-¿Qué se ve en esta imagen?
---MymeBoundary
-Content-Disposition: form-data; name="image"; filename="prueba-ia.jpg"
-Content-Type: image/jpeg
