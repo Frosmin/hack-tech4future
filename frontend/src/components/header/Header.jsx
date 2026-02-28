@@ -17,7 +17,7 @@ const Header = () => {
     <article className={styles.container}>
       <article className={styles.logoContainer}>
         <div className={styles.logo}></div>
-        <Link to={'/'} onClick={(event) => handleClick(event, '/')}>
+        <Link to={'/'} onClick={(event) => handleClick('/')}>
           <h2>DermEncyclopedia</h2>
         </Link>
       </article>

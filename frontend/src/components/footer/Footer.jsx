@@ -28,23 +28,23 @@ const Footer = () => {
         </article>
         <article className={styles.contactos}>
           <h3>Contáctanos</h3>
-          <Link to={"mailto:gruposcoutangloamericanocbba@gmail.com"}>Correo Electrónico</Link>
+          <Link to={"mailto:ricardo.rojas.carvajal@gmail.com"}>Correo Electrónico</Link>
           <Link to={"https://m.me/AngloAmericano225"} target='_blank' rel='noopener'>Facebook</Link>
-          <Link to={"https://wa.me/59168499752"} target='_blank' rel='noopener'>WhatsApp</Link>
+          <Link to={"https://wa.me/59169509997"} target='_blank' rel='noopener'>WhatsApp</Link>
         </article>
         <article className={styles.siguenos}>
           <h3>Siguenos</h3>
           <div className={styles.itemContainer}>
-            <Link to={"https://www.facebook.com/AngloAmericano225"} target='_blank' rel='noopener'>
+            <Link to={"https://www.facebook.com"} target='_blank' rel='noopener'>
               <img
                 src="facebook.svg"
                 alt="Facebook icon"
               />
             </Link>
-            <Link to={"https://www.instagram.com/p/Clbq8okLgLM/"} target='_blank' rel='noopener'>
+            <Link to={"https://www.instagram.com"} target='_blank' rel='noopener'>
               <img src="instagram.svg" alt="Instagram icon" />
             </Link>
-            <Link to={"https://www.tiktok.com/@gruposcoutangloamericano"} target='_blank' rel='noopener'>
+            <Link to={"https://www.tiktok.com"} target='_blank' rel='noopener'>
               <img src="tiktok.svg" alt="Tiktok icon" />
             </Link>
           </div>
