@@ -72,17 +72,6 @@ export default function ResultsPage({ data, onNewAnalysis }) {
       >
         {/* Navbar para salir y volver al seguimiento */}
         <nav className="relative z-10 flex items-center justify-between px-8 py-5 max-w-6xl mx-auto">
-          <a href="/" className="flex items-center gap-2">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)" }}
-            >
-              <span className="text-white font-bold text-lg">M</span>
-            </div>
-            <span className="text-lg font-bold" style={{ color: "#0f172a" }}>
-              Derm<span style={{ color: "#0ea5e9" }}>Encyclopedia</span>
-            </span>
-          </a>
           <button
             onClick={() => navigate(`/dashboard/${id}`)}
             className="text-sm font-bold px-4 py-2 rounded-full border bg-white transition hover:-translate-y-0.5 shadow-sm"
