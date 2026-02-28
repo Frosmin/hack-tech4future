@@ -3,6 +3,7 @@ import ImageUploadZone from "./components/ImageUploadZone";
 import ImageTypeSelector from "./components/ImageTypeSelector";
 import FloatingParticle from "../home/components/FloatingParticle";
 import { PARTICLES } from "../../utils/homeData";
+import ResultsPage from "./ResultsPage"; // Importamos el generador de resultados
 
 const SpinnerIcon = () => (
   <svg
@@ -37,11 +38,14 @@ const ScanIcon = () => (
   </svg>
 );
 
-export default function AnalyzePage({ onResults }) {
+export default function AnalyzePage() {
   const [files, setFiles] = useState([]);
   const [type, setType] = useState(null); // "skin" | "xray"
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  // Nuevo Estado para guardar la respuesta de Go
+  const [analysisResult, setAnalysisResult] = useState(null); 
 
   const canAnalyze = files.length > 0 && type !== null;
 
@@ -53,14 +57,28 @@ export default function AnalyzePage({ onResults }) {
     setError("");
     setLoading(true);
 
-    // Simula llamada a IA (~2s) — aquí conectarás tu API real
+    // TODO: Usar axios para enviar FormData a tu backend en Go.
     await new Promise((r) => setTimeout(r, 2200));
 
-    // Mock de resultados — reemplaza con la respuesta real de tu API
+    // Despachamos los resultados a nuestro nuevo estado
     const mockResults = generateMockResults(type, files);
     setLoading(false);
-    onResults({ files, type, results: mockResults });
+    setAnalysisResult({ files, type, results: mockResults });  
   };
+
+  // Render condicional: Si hay resultados, mostrar ResultPage en vez del formulario
+  if (analysisResult) {
+    return (
+      <ResultsPage 
+        data={analysisResult} 
+        onNewAnalysis={() => {
+          setAnalysisResult(null);
+          setFiles([]);
+          setType(null);
+        }} 
+      />
+    );
+  }
 
   return (
     <div
@@ -296,85 +314,22 @@ export default function AnalyzePage({ onResults }) {
   );
 }
 
-// ── Mock generator (reemplazar con API real) ──────────────────────────────────
+// ── Adaptando el Mock Generator para devolver la estructura exacta de Go ──
 function generateMockResults(type, files) {
-  if (type === "skin") {
-    return {
-      classification: "Posible nevo displásico",
-      confidence: 78,
-      urgency: "moderada",
-      urgencyColor: "#f59e0b",
-      summary:
-        "Se detectaron características asiméttricas y variación de color que sugieren seguimiento dermatológico. No se observan signos claros de malignidad, aunque se recomienda evaluación presencial.",
-      findings: [
-        { label: "Asimetría", value: "Presente", status: "warn" },
-        { label: "Borde", value: "Irregular en sector NE", status: "warn" },
-        { label: "Color", value: "Variación marrón/rosado", status: "warn" },
-        { label: "Diámetro", value: "Estimado > 6mm", status: "warn" },
-        {
-          label: "Evolución",
-          value: "No evaluable (imagen estática)",
-          status: "neutral",
-        },
-      ],
-      differentials: [
-        { name: "Nevo displásico", probability: 78 },
-        { name: "Melanoma in situ", probability: 14 },
-        { name: "Queratosis seborreica", probability: 8 },
-      ],
-      recommendation:
-        "Consultar con dermatólogo en los próximos 2–4 semanas para evaluación clínica y posible dermatoscopia.",
-    };
-  }
-
   return {
-    classification: "Radiografía de tórax PA",
-    confidence: 85,
-    urgency: "baja",
-    urgencyColor: "#22c55e",
-    summary:
-      "Campos pulmonares sin opacidades francas. Se aprecia leve aumento de la trama broncovascular en base derecha que podría corresponder a cambios inflamatorios leves o variante normal.",
-    findings: [
-      {
-        label: "Campos pulmonares",
-        value: "Sin opacidades mayores",
-        status: "ok",
-      },
-      {
-        label: "Silueta cardíaca",
-        value: "Tamaño normal (ICT < 0.5)",
-        status: "ok",
-      },
-      {
-        label: "Ángulos costofrénicos",
-        value: "Libres bilateralmente",
-        status: "ok",
-      },
-      {
-        label: "Trama vascular",
-        value: "Incremento leve en base derecha",
-        status: "warn",
-      },
-      {
-        label: "Mediastino",
-        value: "Centrado, sin ensanchamiento",
-        status: "ok",
-      },
-    ],
-    differentials: [
-      { name: "Estudio normal con variante", probability: 60 },
-      { name: "Bronquitis / cambios inflamatorios", probability: 30 },
-      { name: "Neumonía incipiente", probability: 10 },
-    ],
-    regions: [
-      {
-        label: "Zona de interés",
-        description: "Base derecha con trama aumentada",
-        x: 62,
-        y: 58,
-      },
-    ],
-    recommendation:
-      "Correlacionar con clínica del paciente. Si presenta sintomatología respiratoria, solicitar control radiológico en 4–6 semanas.",
+    ID: 1,
+    title: type === "skin" ? "Tinea pedis interdigital" : "Posible anomalía estructural",
+    description: "Se observa eritema significativo, descamación, maceración y fisuras en los espacios interdigitales... La piel presenta una apariencia blanquecina y agrietada en estas áreas, consistente con una infección fúngica.",
+    treatment: "Mantener los pies limpios y secos, especialmente entre los dedos. Usar calcetines de algodón que absorban la humedad y cambiarlos regularmente. Aplicar un agente antifúngico tópico en la zona afectada. Evitar el uso de calzado ajustado y compartir artículos personales como toallas o calzado.",
+    gravity: "Moderada",
+    provability: 95,
+    isMedical: true,
+    userId: 1,
+    compuestos: [
+      { ID: 1, name: "Miconazol" },
+      { ID: 2, name: "Clotrimazol" },
+      { ID: 3, name: "Terbinafina" },
+      { ID: 4, name: "Ketoconazol" }
+    ]
   };
 }
