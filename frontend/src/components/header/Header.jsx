@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 const Header = () => {
   const { currentPath, updatePath } = usePath();
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   const handleClick = (path) => {
     updatePath(path);
@@ -14,6 +14,13 @@ const Header = () => {
   const handleButton = () => {
     updatePath("/login");
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    logout();
+    updatePath("/login");
+  };
+
   return (
     <article className={styles.container}>
       <article className={styles.logoContainer}>
@@ -50,11 +57,24 @@ const Header = () => {
           </Link>
         )}
       </nav>
-      <article className={styles.right}>
-        <Link className={styles.button} onClick={handleButton} to={"/login"}>
-          Iniciar sesión
-        </Link>
-      </article>
+      {!user ? (
+        <article className={styles.right}>
+          <Link className={styles.button} onClick={handleButton} to={"/login"}>
+            Iniciar sesión
+          </Link>
+        </article>
+      ) : (
+        <article className={styles.right}>
+          <Link
+            className={styles.button}
+            style={{ backgroundColor: "red" }}
+            to={"/login"}
+            onClick={handleLogout}
+          >
+            Cerrar sesión
+          </Link>
+        </article>
+      )}
     </article>
   );
 };

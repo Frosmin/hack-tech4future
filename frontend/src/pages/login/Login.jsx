@@ -87,7 +87,7 @@ const Login = () => {
               opacity: loading ? 0.7 : 1,
             }}
           >
-            {loading ? "Iniciando..." : "Log In"}
+            {loading ? "Iniciando..." : "Iniciar sesión"}
           </Link>
           <small>
             ¿No tienes cuenta? <span>Registrate</span>
