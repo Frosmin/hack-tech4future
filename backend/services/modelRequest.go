@@ -138,7 +138,7 @@ func CompareEvolution(oldImageBytes, newImageBytes []byte, contextInfo string) (
     Devuelve estrictamente un JSON:
     {
         "evolutionStatus": "Mejora", "Empeoramiento" o "Sin cambios",
-        "analysisSummary": "Explica brevemente los cambios."
+        "analysisSummary": "Explica brevemente los cambios. tiene que ser en 10 palabras máximo",
     }
     `
 
