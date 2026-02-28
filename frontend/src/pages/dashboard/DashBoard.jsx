@@ -82,7 +82,7 @@ export default function Dashboard() {
           sortedData.photos.sort(
             (a, b) =>
               new Date(a.dateTaken || a.CreatedAt) -
-              new Date(b.dateTaken || b.CreatedAt)
+              new Date(b.dateTaken || b.CreatedAt),
           );
         }
         setData(sortedData);
@@ -212,7 +212,7 @@ export default function Dashboard() {
                     color: "#64748b",
                   }}
                 >
-                  📅 {formatDate(data.CreatedAt)}
+                  {formatDate(data.CreatedAt)}
                 </span>
               </div>
               <h1
@@ -264,12 +264,6 @@ export default function Dashboard() {
               style={{ borderColor: "#e2e8f0" }}
             >
               <div className="flex items-center gap-2 mb-4">
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center"
-                  style={{ background: "#f0f9ff" }}
-                >
-                  <span className="text-base">📋</span>
-                </div>
                 <h3
                   className="text-base font-bold"
                   style={{ color: "#0f172a" }}
@@ -277,10 +271,7 @@ export default function Dashboard() {
                   Descripción Clínica
                 </h3>
               </div>
-              <p
-                className="text-sm leading-[1.8]"
-                style={{ color: "#475569" }}
-              >
+              <p className="text-sm leading-[1.8]" style={{ color: "#475569" }}>
                 {data.description}
               </p>
             </div>
@@ -289,8 +280,7 @@ export default function Dashboard() {
             <div
               className="rounded-2xl p-6 border shadow-sm"
               style={{
-                background:
-                  "linear-gradient(135deg, #f0f9ff 0%, #eff6ff 100%)",
+                background: "linear-gradient(135deg, #f0f9ff 0%, #eff6ff 100%)",
                 borderColor: "#bae6fd",
               }}
             >
@@ -302,12 +292,7 @@ export default function Dashboard() {
                     border: "1px solid #bae6fd",
                   }}
                 >
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
                     <path
                       d="M22 11.08V12a10 10 0 11-5.93-9.14"
                       stroke="#0ea5e9"
@@ -358,12 +343,6 @@ export default function Dashboard() {
                 style={{ borderColor: "#e2e8f0" }}
               >
                 <div className="flex items-center gap-2 mb-4">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "#faf5ff" }}
-                  >
-                    <span className="text-base">💊</span>
-                  </div>
                   <h3
                     className="text-sm font-bold"
                     style={{ color: "#0f172a" }}
@@ -430,8 +409,7 @@ export default function Dashboard() {
             className="px-6 md:px-8 py-5 border-b flex items-center justify-between flex-wrap gap-3"
             style={{
               borderColor: "#f1f5f9",
-              background:
-                "linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%)",
+              background: "linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%)",
             }}
           >
             <div>
@@ -494,7 +472,11 @@ export default function Dashboard() {
                   {data.photos.map((photo, index) => {
                     const isFirst = index === 0;
                     const isLast = index === data.photos.length - 1;
-                    const dotColor = isLast ? "#0ea5e9" : isFirst ? "#6366f1" : "#cbd5e1";
+                    const dotColor = isLast
+                      ? "#0ea5e9"
+                      : isFirst
+                        ? "#6366f1"
+                        : "#cbd5e1";
 
                     return (
                       <div key={photo.ID} className="relative group">
@@ -516,8 +498,8 @@ export default function Dashboard() {
                               {isFirst
                                 ? "Inicio"
                                 : isLast
-                                ? "Última"
-                                : `#${index + 1}`}
+                                  ? "Última"
+                                  : `#${index + 1}`}
                             </span>
                           </div>
                         </div>
@@ -562,8 +544,7 @@ export default function Dashboard() {
                           </div>
 
                           {/* Análisis de evolución (si existe) */}
-                          {(photo.evolutionStatus ||
-                            photo.analysisSummary) && (
+                          {(photo.evolutionStatus || photo.analysisSummary) && (
                             <div
                               className="px-3 py-3 border-t"
                               style={{
@@ -655,8 +636,7 @@ export default function Dashboard() {
                 <div
                   className="w-20 h-20 rounded-2xl flex items-center justify-center mb-5 shadow-sm"
                   style={{
-                    background:
-                      "linear-gradient(135deg, #f0f9ff, #ede9fe)",
+                    background: "linear-gradient(135deg, #f0f9ff, #ede9fe)",
                     border: "1px solid #e2e8f0",
                   }}
                 >
