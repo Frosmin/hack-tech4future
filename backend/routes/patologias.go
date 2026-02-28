@@ -12,6 +12,7 @@ import (
 	"github.com/Frosmin/backend/models"
 	"github.com/Frosmin/backend/services"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func PostPatologia(c *gin.Context) {
@@ -162,4 +163,46 @@ func GetPatologiaByID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, patologia)
+}
+
+func GetMisPatologias(c *gin.Context) {
+
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuario no autorizado"})
+		return
+	}
+
+	var patologias []models.Patologia
+	db.DB.Preload("Photos", func(db *gorm.DB) *gorm.DB {
+		return db.Order("created_at ASC")
+	}).Where("user_id = ?", userID).Order("created_at DESC").Find(&patologias)
+
+	type PatologiaResumen struct {
+		ID      uint   `json:"id"`
+		Title   string `json:"title"`
+		Gravity string `json:"gravity"`
+		Image   string `json:"Image"`
+	}
+
+	var resultado []PatologiaResumen
+	for _, p := range patologias {
+		fotoBase := ""
+		if len(p.Photos) > 0 {
+			fotoBase = p.Photos[0].PhotoUrl
+		}
+
+		resultado = append(resultado, PatologiaResumen{
+			ID:      p.ID,
+			Title:   p.Title,
+			Gravity: p.Gravity,
+			Image:   fotoBase,
+		})
+	}
+
+	if resultado == nil {
+		resultado = []PatologiaResumen{}
+	}
+
+	c.JSON(http.StatusOK, resultado)
 }

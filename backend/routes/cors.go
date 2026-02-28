@@ -28,6 +28,8 @@ func SetupRouter() *gin.Engine {
 	protected := r.Group("/protected")
 	protected.Use(middlewares.AuthMiddleware())
 	{
+		protected.GET("/misPatologias", GetMisPatologias)
+
 		protected.POST("/chat/image", PostPatologia)
 		protected.GET("/patologia/:id", GetPatologiaByID)
 	}
