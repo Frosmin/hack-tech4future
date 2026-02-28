@@ -27,10 +27,11 @@
   }
   input{
     border-radius: 15px;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     height: 2rem;
     padding: 10px 1rem;
     font-size: 1.2rem;
+    background: white;
   }
   span{
     color: blueviolet;

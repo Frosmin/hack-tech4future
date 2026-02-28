@@ -1,0 +1,13 @@
+.container{
+  padding: 1rem;
+  border-radius: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.container img{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 15px;
+}
