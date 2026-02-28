@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useParams, useNavigate } from "react-router"; // <-- 1. Importaciones de React Router
+import { useAxios } from "../../hooks/axios"; // <-- 2. Importar el manejador HTTP
 import ImageUploadZone from "./components/ImageUploadZone";
 import ImageTypeSelector from "./components/ImageTypeSelector";
 import FloatingParticle from "../home/components/FloatingParticle";
@@ -39,12 +41,16 @@ const ScanIcon = () => (
 );
 
 export default function AnalyzePage() {
+  const { id } = useParams(); // Obtenemos el ID de la URL
+  const navigate = useNavigate();
+  const { request } = useAxios(); // Invocamos tu Custom Hook Axios
+
   const [files, setFiles] = useState([]);
   const [type, setType] = useState(null); // "skin" | "xray"
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   
-  // Nuevo Estado para guardar la respuesta de Go
+  // Estado para guardar la respuesta de Go y pasarla a ResultsPage
   const [analysisResult, setAnalysisResult] = useState(null); 
 
   const canAnalyze = files.length > 0 && type !== null;
@@ -57,13 +63,50 @@ export default function AnalyzePage() {
     setError("");
     setLoading(true);
 
-    // TODO: Usar axios para enviar FormData a tu backend en Go.
-    await new Promise((r) => setTimeout(r, 2200));
+    // El backend en Go espera 'image' en el FormData
+    const formData = new FormData();
+    formData.append("image", files[0]); 
 
-    // Despachamos los resultados a nuestro nuevo estado
-    const mockResults = generateMockResults(type, files);
-    setLoading(false);
-    setAnalysisResult({ files, type, results: mockResults });  
+    try {
+      // Condición: Si existe un id y es numéricamente diferente de "0" -> MODO COMPARACIÓN
+      if (id && id !== "0") {
+        
+        // 1. Enviamos el FormData al Endpoint de Evolución / Comparación
+        const response = await request({
+          method: "POST",
+          url: `/protected/compararPatologias/${id}`, // <-- Apuntamos a la ruta exacta de tu backend
+          data: formData,
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        if (response) {
+           // Éxito: Pasamos a ResultsPage indicando que es una Comparación Visual
+           setAnalysisResult({ isComparison: true, files, type, results: response, id });
+        }
+
+      } else {
+
+        // Condición: Es una evaluación nueva. -> MODO NUEVA PATOLOGÍA
+        const response = await request({
+          method: "POST",
+          url: `/protected/chat/image`, 
+          data: formData,
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        if (response && response.ID) {
+          // Éxito: Extraemos el ID recién creado por GORM y redirigimos a su propio Dashboard
+          navigate(`/dashboard/${response.ID}`);
+        } else if (response) {
+          // Fallback por precaución si no trae ID
+          setAnalysisResult({ files, type, results: response });
+        }
+      }
+    } catch (err) {
+      setError("Ocurrió un problema de red enviando los datos.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Render condicional: Si hay resultados, mostrar ResultPage en vez del formulario

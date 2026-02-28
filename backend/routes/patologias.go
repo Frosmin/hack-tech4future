@@ -288,6 +288,10 @@ func ComparePatologias(c *gin.Context) {
 		return
 	}
 
-	// 10. Devolver la foto nueva con sus diagnósticos para el frontend
-	c.JSON(http.StatusOK, nuevaFoto)
+	// 10. Devolver LA NUEVA FOTO junto con la ANTERIOR para renderizar el comparador en React
+	c.JSON(http.StatusOK, gin.H{
+		"nuevaFoto":      nuevaFoto,
+		"oldPhotoUrl":    ultimaFoto.PhotoUrl,
+		"patologiaTitle": patologia.Title,
+	})
 }

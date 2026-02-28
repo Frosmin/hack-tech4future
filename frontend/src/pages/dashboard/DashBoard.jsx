@@ -206,7 +206,7 @@ export default function Dashboard() {
                 {/* Botón "Añadir Nueva Foto" al final del timeline */}
                 <div className="relative flex flex-col items-center min-w-[150px] snap-center justify-center">
                   <button 
-                    onClick={() => navigate('/analizar')} 
+                    onClick={() => navigate('/analizar/' + id)} 
                     className="h-32 w-full mt-8 rounded-xl border-2 border-dashed flex flex-col items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer" 
                     style={{ borderColor: "#cbd5e1" }}
                   >
@@ -222,7 +222,7 @@ export default function Dashboard() {
                <p className="text-sm font-semibold text-slate-600">Aún no hay fotos de seguimiento.</p>
                <p className="text-xs text-slate-400 mt-1 mb-4">Sube fotos regularmente para registrar tu mejora.</p>
                <button 
-                 onClick={() => navigate('/analizar')}
+                 onClick={() => navigate('/analizar/' + id)}
                  className="px-4 py-2 text-xs font-semibold text-white rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
                  style={{ background: "linear-gradient(135deg, #0ea5e9, #6366f1)" }}
                >

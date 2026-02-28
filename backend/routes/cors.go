@@ -32,6 +32,8 @@ func SetupRouter() *gin.Engine {
 
 		protected.POST("/chat/image", PostPatologia)
 		protected.GET("/patologia/:id", GetPatologiaByID)
+
+		protected.POST("/compararPatologias/:id", ComparePatologias)
 	}
 	return r
 }

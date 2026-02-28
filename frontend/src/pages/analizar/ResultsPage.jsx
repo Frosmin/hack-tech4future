@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router"; // <-- Importamos usar rutas
 import FloatingParticle from "../home/components/FloatingParticle";
 import { PARTICLES } from "../../utils/homeData";
 
@@ -34,11 +35,104 @@ function ConfidenceMeter({ value, color }) {
 // ── Página principal ──────────────────────────────────────────────────────────
 
 export default function ResultsPage({ data, onNewAnalysis }) {
-  const { files, type, results } = data;
+  const { files, type, results, isComparison, id } = data;
   const [activeImg, setActiveImg] = useState(0);
+  const navigate = useNavigate(); // <-- Inicializamos navegación
 
   const accentColor = type === "skin" ? "#0ea5e9" : "#6366f1";
 
+  // =========================================================================
+  // MODO COMPARACIÓN (Evolución de un registro existente)
+  // =========================================================================
+  if (isComparison) {
+    const { nuevaFoto, oldPhotoUrl, patologiaTitle } = results;
+    const isImprovement = nuevaFoto?.evolutionStatus === "Mejora";
+    const isWorse = nuevaFoto?.evolutionStatus === "Empeoramiento";
+    
+    // Paletas dinámicas por evolución IA
+    const statusColor = isImprovement ? "#16a34a" : isWorse ? "#dc2626" : "#475569";
+    const statusBg = isImprovement ? "#dcfce7" : isWorse ? "#fee2e2" : "#f1f5f9";
+
+    return (
+      <div className="min-h-screen relative overflow-hidden" 
+           style={{ background: "linear-gradient(135deg,#f0f9ff 0%,#e8f4fe 30%,#f5f3ff 70%,#faf5ff 100%)", fontFamily: "'Georgia', serif" }}>
+        
+        {/* Navbar para salir y volver al seguimiento */}
+        <nav className="relative z-10 flex items-center justify-between px-8 py-5 max-w-6xl mx-auto">
+          <a href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)" }}>
+              <span className="text-white font-bold text-lg">M</span>
+            </div>
+            <span className="text-lg font-bold" style={{ color: "#0f172a" }}>Derm<span style={{ color: "#0ea5e9" }}>Encyclopedia</span></span>
+          </a>
+          <button onClick={() => navigate(`/dashboard/${id}`)} className="text-sm font-bold px-4 py-2 rounded-full border bg-white transition hover:-translate-y-0.5 shadow-sm">
+            Volver al Historial
+          </button>
+        </nav>
+
+        <main className="relative z-10 max-w-5xl mx-auto px-8 pt-4 pb-16">
+          <div className="text-center mb-10">
+            <span className="text-xs font-bold px-4 py-1.5 rounded-full shadow-sm mb-3 inline-block" style={{ background: statusBg, color: statusColor }}>
+              Comparativa Evolutiva por IA
+            </span>
+            <h1 className="text-3xl font-bold" style={{ color: "#0f172a", letterSpacing: "-0.02em" }}>{patologiaTitle}</h1>
+            <p className="mt-2 text-slate-500">Compara tu fotografía anterior con la captura más reciente del día de hoy.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            {/* LADO IZQUIERDO: Las dos imágenes juntas */}
+            <div className="flex gap-4">
+               <div className="flex-1 flex flex-col">
+                  <span className="text-xs tracking-wider font-bold text-slate-400 mb-2 truncate text-center">FOTO ANTERIOR</span>
+                  <div className="rounded-xl overflow-hidden border-2 shadow-sm" style={{ borderColor: "#e2e8f0" }}>
+                     <img src={oldPhotoUrl} alt="Anterior" className="w-full h-[18rem] object-cover" />
+                  </div>
+               </div>
+               <div className="flex-1 flex flex-col relative top-4">
+                  <span className="text-xs tracking-wider font-bold text-sky-500 mb-2 truncate text-center">NUEVA CAPTURA</span>
+                  <div className="rounded-xl overflow-hidden border-4 shadow-lg shadow-sky-100" style={{ borderColor: "#38bdf8" }}>
+                     <img src={URL.createObjectURL(files[0])} alt="Actual" className="w-full h-[18rem] object-cover" />
+                  </div>
+               </div>
+            </div>
+
+            {/* LADO DERECHO: El Veredicto de la IA */}
+            <div className="flex flex-col gap-5 mt-4">
+               <div className="rounded-2xl p-6 border bg-white/90 backdrop-blur-sm shadow-md" style={{ borderColor: "#e2e8f0" }}>
+                  <p className="text-sm font-bold mb-5 flex items-center gap-2" style={{ color: "#0f172a" }}>
+                    <span className="text-xl">🤖</span> Dictamen Médico de Gemini IA
+                  </p>
+
+                  <div className="flex items-center gap-3 mb-5">
+                     <span className="px-5 py-2.5 rounded-xl text-lg font-bold shadow-sm border" style={{ background: statusBg, color: statusColor, borderColor: statusColor }}>
+                        {nuevaFoto?.evolutionStatus || "No determinado"}
+                     </span>
+                  </div>
+
+                  <div className="p-4 rounded-xl border border-slate-100 bg-slate-50">
+                    <p className="text-[0.95rem] leading-relaxed font-medium" style={{ color: "#475569" }}>
+                      "{nuevaFoto?.analysisSummary}"
+                    </p>
+                  </div>
+               </div>
+               
+               <button
+                  onClick={() => navigate(`/dashboard/${id}`)}
+                  className="w-full py-4 rounded-2xl text-sm justify-center flex items-center gap-2 font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:-translate-y-1"
+                  style={{ background: "linear-gradient(135deg, #0ea5e9, #6366f1)" }}
+               >
+                  Continuar hacia el seguimiento completo ↗
+               </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // MODO CREACIÓN NORMAL (El layout tradicional de ResultsPage)
+  // =========================================================================
   // Mapeamos el string "gravity" que viene del backend a los colores
   const urgencyStyle = {
     alta: { bg: "#fee2e2", color: "#dc2626", label: "Gravedad Alta" },
